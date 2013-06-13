@@ -27,6 +27,8 @@ from oauth2client.client import FlowExchangeError
 from model import Credentials
 import util
 
+import traceback
+
 
 SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
           'https://www.googleapis.com/auth/glass.location '
@@ -75,8 +77,9 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
         # the code, return None.
         try:
             creds = oauth_flow.step2_exchange(code)
-        except FlowExchangeError:
-            # TODO: Display error.
+        except FlowExchangeError as e:
+            logging.error("Exception in OAuth flow exchange")
+            logging.error("%s", traceback.format_exc())
             return None
 
         users_service = util.create_service('oauth2', 'v2', creds)
