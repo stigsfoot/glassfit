@@ -16,11 +16,10 @@
 
 __author__ = 'alainv@google.com (Alain Vongsouvanh)'
 
-
 import logging
-import webapp2
 from urlparse import urlparse
 
+import webapp2
 from oauth2client.appengine import StorageByKeyName
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -35,128 +34,128 @@ SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
 
 
 class OAuthBaseRequestHandler(webapp2.RequestHandler):
-  """Base request handler for OAuth 2.0 flow."""
+    """Base request handler for OAuth 2.0 flow."""
 
-  def create_oauth_flow(self):
-    """Create OAuth2.0 flow controller."""
-    flow = flow_from_clientsecrets('client_secrets.json', scope=SCOPES)
-    # Dynamically set the redirect_uri based on the request URL. This is
-    # extremely convenient for debugging to an alternative host without manually
-    # setting the redirect URI.
-    pr = urlparse(self.request.url)
-    flow.redirect_uri = '%s://%s/oauth2callback' % (pr.scheme, pr.netloc)
-    return flow
+    def create_oauth_flow(self):
+        """Create OAuth2.0 flow controller."""
+        flow = flow_from_clientsecrets('client_secrets.json', scope=SCOPES)
+        # Dynamically set the redirect_uri based on the request URL. This is
+        # extremely convenient for debugging to an alternative host without manually
+        # setting the redirect URI.
+        pr = urlparse(self.request.url)
+        flow.redirect_uri = '%s://%s/oauth2callback' % (pr.scheme, pr.netloc)
+        return flow
 
 
 class OAuthCodeRequestHandler(OAuthBaseRequestHandler):
-  """Request handler for OAuth 2.0 auth request."""
+    """Request handler for OAuth 2.0 auth request."""
 
-  def get(self):
-    flow = self.create_oauth_flow()
-    flow.params['approval_prompt'] = 'force'
-    # Create the redirect URI by performing step 1 of the OAuth 2.0 web server
-    # flow.
-    uri = flow.step1_get_authorize_url()
-    # Perform the redirect.
-    self.redirect(str(uri))
+    def get(self):
+        flow = self.create_oauth_flow()
+        flow.params['approval_prompt'] = 'force'
+        # Create the redirect URI by performing step 1 of the OAuth 2.0 web server
+        # flow.
+        uri = flow.step1_get_authorize_url()
+        # Perform the redirect.
+        self.redirect(str(uri))
 
 
 class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
-  """Request handler for OAuth 2.0 code exchange."""
+    """Request handler for OAuth 2.0 code exchange."""
 
-  def get(self):
-    """Handle code exchange."""
-    code = self.request.get('code')
-    if not code:
-      # TODO: Display error.
-      return None
-    oauth_flow = self.create_oauth_flow()
+    def get(self):
+        """Handle code exchange."""
+        code = self.request.get('code')
+        if not code:
+            # TODO: Display error.
+            return None
+        oauth_flow = self.create_oauth_flow()
 
-    # Perform the exchange of the code. If there is a failure with exchanging
-    # the code, return None.
-    try:
-      creds = oauth_flow.step2_exchange(code)
-    except FlowExchangeError:
-      # TODO: Display error.
-      return None
+        # Perform the exchange of the code. If there is a failure with exchanging
+        # the code, return None.
+        try:
+            creds = oauth_flow.step2_exchange(code)
+        except FlowExchangeError:
+            # TODO: Display error.
+            return None
 
-    users_service = util.create_service('oauth2', 'v2', creds)
-    # TODO: Check for errors.
-    user = users_service.userinfo().get().execute()
+        users_service = util.create_service('oauth2', 'v2', creds)
+        # TODO: Check for errors.
+        user = users_service.userinfo().get().execute()
 
-    userid = user.get('id')
+        userid = user.get('id')
 
-    # Store the credentials in the data store using the userid as the key.
-    # TODO: Hash the userid the same way the userToken is.
-    StorageByKeyName(Credentials, userid, 'credentials').put(creds)
-    logging.info('Successfully stored credentials for user: %s', userid)
-    util.store_userid(self, userid)
+        # Store the credentials in the data store using the userid as the key.
+        # TODO: Hash the userid the same way the userToken is.
+        StorageByKeyName(Credentials, userid, 'credentials').put(creds)
+        logging.info('Successfully stored credentials for user: %s', userid)
+        util.store_userid(self, userid)
 
-    self._perform_post_auth_tasks(userid, creds)
-    self.redirect('/')
+        self._perform_post_auth_tasks(userid, creds)
+        self.redirect('/')
 
-  def _perform_post_auth_tasks(self, userid, creds):
-    """Perform commong post authorization tasks.
+    def _perform_post_auth_tasks(self, userid, creds):
+        """Perform commong post authorization tasks.
 
-    Subscribes the service to notifications for the user and add one sharing
-    contact.
+        Subscribes the service to notifications for the user and add one sharing
+        contact.
 
-    Args:
-      userid: ID of the current user.
-      creds: Credentials for the current user.
-    """
-    mirror_service = util.create_service('mirror', 'v1', creds)
-    hostname = util.get_full_url(self, '')
+        Args:
+          userid: ID of the current user.
+          creds: Credentials for the current user.
+        """
+        mirror_service = util.create_service('mirror', 'v1', creds)
+        hostname = util.get_full_url(self, '')
 
-    # Only do the post auth tasks when deployed.
-    if hostname.startswith('https://'):
-      # Insert a subscription.
-      subscription_body = {
-          'collection': 'timeline',
-          # TODO: hash the userToken.
-          'userToken': userid,
-          'callbackUrl': util.get_full_url(self, '/notify')
-      }
-      mirror_service.subscriptions().insert(body=subscription_body).execute()
+        # Only do the post auth tasks when deployed.
+        if hostname.startswith('https://'):
+            # Insert a subscription.
+            subscription_body = {
+                'collection': 'timeline',
+                # TODO: hash the userToken.
+                'userToken': userid,
+                'callbackUrl': util.get_full_url(self, '/notify')
+            }
+            mirror_service.subscriptions().insert(body=subscription_body).execute()
 
-      # Insert a sharing contact.
-      contact_body = {
-          'id': 'GlassFit Coach',
-          'displayName': 'GlassFit Coach',
-          'imageUrls': [util.get_full_url(self, 'http://i.imgur.com/ZWzIEE8.png')]
-      }
-      mirror_service.contacts().insert(body=contact_body).execute()
-    else:
-      logging.info('Post auth tasks are not supported on staging.')
+            # Insert a sharing contact.
+            contact_body = {
+                'id': 'GlassFit Coach',
+                'displayName': 'GlassFit Coach',
+                'imageUrls': [util.get_full_url(self, 'http://i.imgur.com/ZWzIEE8.png')]
+            }
+            mirror_service.contacts().insert(body=contact_body).execute()
+        else:
+            logging.info('Post auth tasks are not supported on staging.')
 
-   # Insert welcome message & associated actions.
-    timeline_item_body = {
-        "html": ("<article class=\"photo\">"
-                 "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
-                 "  <section>"
-                 "    <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
-                 "  </section>"
-                 "</article>"),
-        "menuItems": [{
-            "action": "CUSTOM",
-            "id": "warmup",
-            "values": [{
-              "displayName": "Warmup",
-              "iconUrl": [util.get_full_url(self, "/static/images/icons/whistle.png")]
-            }]
-        },
-        {
-            "action": "TOGGLE_PINNED"
-        },
-        {
-            "action": "DELETE"
+            # Insert welcome message & associated actions.
+        timeline_item_body = {
+            "html": ("<article class=\"photo\">"
+                     "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
+                     "  <section>"
+                     "    <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
+                     "  </section>"
+                     "</article>"),
+            "menuItems": [{
+                              "action": "CUSTOM",
+                              "id": "warmup",
+                              "values": [{
+                                             "displayName": "Warmup",
+                                             "iconUrl": [util.get_full_url(self, "/static/images/icons/whistle.png")]
+                                         }]
+                          },
+                          {
+                              "action": "TOGGLE_PINNED"
+                          },
+                          {
+                              "action": "DELETE"
+                          }
+            ],
+            'notification': {
+                'level': 'DEFAULT'
+            }
         }
-        ],
-        'notification': {
-            'level': 'DEFAULT'
-        }
-    }
-    mirror_service.timeline().insert(body=timeline_item_body).execute()
+        mirror_service.timeline().insert(body=timeline_item_body).execute()
 
 
 OAUTH_ROUTES = [

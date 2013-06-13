@@ -6,18 +6,11 @@
 __author__ = 'noble.ackerson@gmail.com (Noble Ackerson)'
 
 # Imports
-import logging
-import json
-import urllib
-import re
+
 
 def getGlassFitWorkout(self):
-
-  pass
-
-
+    pass
 
 
 def createGlassFitBundle(self):
-  
-  pass
+    pass
