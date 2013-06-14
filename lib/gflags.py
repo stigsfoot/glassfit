@@ -669,7 +669,7 @@ def TextWrap(text, length=None, indent='', firstline_indent=None, tabs='    '):
                 else:
                     # if not all tab replacement is whitespace we prepend it to the word
                     word = tabs * len(current_tabs) + word
-                # Handle the case where word cannot be squeezed onto current last line
+                    # Handle the case where word cannot be squeezed onto current last line
             if len(line) + len(word) > length and len(indent) + len(word) <= length:
                 result.append(line.rstrip())
                 line = indent + word
@@ -680,8 +680,8 @@ def TextWrap(text, length=None, indent='', firstline_indent=None, tabs='    '):
                     line = indent
                 else:
                     line += ' '
-                # Add word and shorten it up to allowed line length. Restart next
-            # line with indent and repeat, or add a space if we're done (word
+                    # Add word and shorten it up to allowed line length. Restart next
+                # line with indent and repeat, or add a space if we're done (word
             # finished) This deals with words that cannot fit on one line
             # (e.g. indent + word longer than allowed line length).
             while len(line) + len(word) >= length:
@@ -692,8 +692,8 @@ def TextWrap(text, length=None, indent='', firstline_indent=None, tabs='    '):
                 # Default case, simply append the word and a space
             if word:
                 line += word + ' '
-            # End of input line. If we have content we finish the line. If the
-        # current line is just the indent but we had content in during this
+                # End of input line. If we have content we finish the line. If the
+            # current line is just the indent but we had content in during this
         # original line then we need to add an empty line.
         if (result and line != indent) or (not result and line != firstline_indent):
             result.append(line.rstrip())
@@ -1989,7 +1989,7 @@ class Flag:
         # we just forward the call to it.
         self.parser.WriteCustomInfoInXMLFormat(outfile, indent)
 
-    # End of Flag definition
+        # End of Flag definition
 
 
 class _ArgumentParserCache(type):
@@ -2514,7 +2514,7 @@ class FloatParser(NumericParser):
     def Type(self):
         return 'float'
 
-    # End of FloatParser
+        # End of FloatParser
 
 
 def DEFINE_float(name, default, help, lower_bound=None, upper_bound=None,

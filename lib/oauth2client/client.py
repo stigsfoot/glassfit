@@ -23,7 +23,6 @@ import base64
 import copy
 import httplib2
 import logging
-import os
 import sys
 import time
 import urllib

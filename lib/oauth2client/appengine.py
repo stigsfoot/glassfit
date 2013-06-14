@@ -19,13 +19,11 @@ Utilities for making it easier to use OAuth 2.0 on Google App Engine.
 
 __author__ = 'jcgregorio@google.com (Joe Gregorio)'
 
-import base64
 import cgi
 import httplib2
 import logging
 import os
 import pickle
-import time
 
 from google.appengine.api import app_identity
 from google.appengine.api import memcache
@@ -33,7 +31,6 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import login_required
-from google.appengine.ext.webapp.util import run_wsgi_app
 from oauth2client import GOOGLE_AUTH_URI
 from oauth2client import GOOGLE_REVOKE_URI
 from oauth2client import GOOGLE_TOKEN_URI

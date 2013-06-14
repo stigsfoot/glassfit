@@ -40,9 +40,23 @@ class NotifyHandler(webapp2.RequestHandler):
         self.mirror_service = util.create_service(
             'mirror', 'v1',
             StorageByKeyName(Credentials, userid, 'credentials').get())
-        if data.get('collection') == 'timeline':
+        if data.get('collection') == 'locations':
+            self._handle_locations_notification(data)
+        elif data.get('collection') == 'timeline':
             self._handle_timeline_notification(data)
 
+    def _handle_locations_notification(self, data):
+        """Handle locations notification."""
+        location = self.mirror_service.locations().get(id=data['itemId']).execute()
+        text = 'New location is %s, %s' % (location.get('latitude'),
+                                           location.get('longitude'))
+        body = {
+            'text': text,
+            'location': location,
+            'menuItems': [{'action': 'NAVIGATE'}],
+            'notification': {'level': 'DEFAULT'}
+        }
+        self.mirror_service.timeline().insert(body=body).execute()
 
     def _handle_timeline_notification(self, data):
         """Handle timeline notification."""
@@ -50,10 +64,8 @@ class NotifyHandler(webapp2.RequestHandler):
             if user_action.get('type') == 'SHARE':
                 # Fetch the timeline item.
                 item = self.mirror_service.timeline().get(id=data['itemId']).execute()
-
                 attachments = item.get('attachments', [])
                 media = None
-
                 if attachments:
                     # Get the first attachment on that timeline item and do stuff with it.
                     attachment = self.mirror_service.timeline().attachments().get(
@@ -69,15 +81,6 @@ class NotifyHandler(webapp2.RequestHandler):
                         logging.info('Unable to retrieve attachment: %s', resp.status)
                 body = {
                     'text': 'Echoing your shared item: %s' % item.get('text', ''),
-                    'menuItems':
-                        [{
-                             "action": "CUSTOM",
-                             "id": "next",
-                             "values": [{
-                                            "displayName": "Next Workout",
-                                            "iconUrl": "/static/images/icons/whistle.png"
-                                        }]
-                         }],
                     'notification': {'level': 'DEFAULT'}
                 }
                 self.mirror_service.timeline().insert(

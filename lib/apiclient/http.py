@@ -22,9 +22,7 @@ actuall HTTP request.
 __author__ = 'jcgregorio@google.com (Joe Gregorio)'
 
 import StringIO
-import base64
 import copy
-import gzip
 import httplib2
 import mimetypes
 import os

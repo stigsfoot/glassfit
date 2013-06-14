@@ -31,8 +31,6 @@ The format of the stored data is like so:
 
 __author__ = 'jbeda@google.com (Joe Beda)'
 
-import base64
-import errno
 import logging
 import os
 import threading

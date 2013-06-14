@@ -27,8 +27,6 @@ from oauth2client.client import FlowExchangeError
 from model import Credentials
 import util
 
-import traceback
-
 
 SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
           'https://www.googleapis.com/auth/glass.location '
@@ -77,9 +75,8 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
         # the code, return None.
         try:
             creds = oauth_flow.step2_exchange(code)
-        except FlowExchangeError as e:
-            logging.error("Exception in OAuth flow exchange")
-            logging.error("%s", traceback.format_exc())
+        except FlowExchangeError:
+            # TODO: Display error.
             return None
 
         users_service = util.create_service('oauth2', 'v2', creds)
@@ -123,45 +120,17 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
 
             # Insert a sharing contact.
             contact_body = {
-                'id': 'GlassFit Coach',
-                'displayName': 'GlassFit Coach',
-                'imageUrls': [util.get_full_url(self, 'http://i.imgur.com/ZWzIEE8.png')]
+                'id': 'Python Quick Start',
+                'displayName': 'Python Quick Start',
+                'imageUrls': [util.get_full_url(self, '/static/images/python.png')]
             }
             mirror_service.contacts().insert(body=contact_body).execute()
         else:
             logging.info('Post auth tasks are not supported on staging.')
 
-            # Insert welcome message & associated actions.
+        # Insert welcome message.
         timeline_item_body = {
-            "html": ("<article class=\"photo\">"
-                     "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
-                     "  <section>"
-                     "    <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
-                     "  </section>"
-                     "</article>"),
-            "htmlPages": [
-                     "<article class=\"photo\">"
-                     "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
-                     "  <section>"
-                     "    <p class=\"text-auto-size black\">Be sure to fully stretch for 10 mins.</p>"
-                     "  </section>"
-                     "</article>"
-            ],
-            "menuItems": [{
-                              "action": "CUSTOM",
-                              "id": "warmup",
-                              "values": [{
-                                             "displayName": "Warmup",
-                                             "iconUrl": [util.get_full_url(self, "/static/images/icons/whistle.png")]
-                                         }]
-                          },
-                          {
-                              "action": "TOGGLE_PINNED"
-                          },
-                          {
-                              "action": "DELETE"
-                          }
-            ],
+            'text': 'Welcome to the Python Quick Start',
             'notification': {
                 'level': 'DEFAULT'
             }

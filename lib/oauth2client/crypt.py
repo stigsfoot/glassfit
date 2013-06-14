@@ -16,7 +16,6 @@
 # limitations under the License.
 
 import base64
-import hashlib
 import logging
 import time
 

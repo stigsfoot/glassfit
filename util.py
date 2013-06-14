@@ -20,7 +20,6 @@ from urlparse import urlparse
 
 import httplib2
 from apiclient.discovery import build
-from google.appengine.api.app_identity import get_application_id
 from oauth2client.appengine import StorageByKeyName
 import sessions
 
@@ -31,10 +30,7 @@ from model import Credentials
 # Create one of these for yourself with, for example:
 # python -c "import os; print os.urandom(64)" > session.secret
 SESSION_SECRET = open('session.secret').read()
-appname = get_application_id()
 
-# base_url shortcut to fix full url post issue -noble
-base_url = "https://" + appname + ".appspot.com"
 
 def get_full_url(request_handler, path):
     """Return the full url from the provided request handler and path."""

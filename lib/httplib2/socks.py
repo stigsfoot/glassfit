@@ -43,7 +43,6 @@ mainly to merge bug fixes found in Sourceforge
 import base64
 import socket
 import struct
-import sys
 
 if getattr(socket, 'socket', None) is None:
     raise ImportError('socket.socket missing, proxy support unusable')
@@ -257,7 +256,7 @@ class socksocket(socket.socket):
                 raise Socks5AuthError((2, _socks5autherrors[2]))
             else:
                 raise GeneralProxyError((1, _generalerrors[1]))
-            # Now we can request the actual connection
+                # Now we can request the actual connection
         req = struct.pack('BBB', 0x05, 0x01, 0x00)
         # If the given destination address is an IP address, we'll
         # use the IPv4 address request even if remote resolving was specified.
@@ -338,7 +337,7 @@ class socksocket(socket.socket):
                 rmtrslv = True
             else:
                 ipaddr = socket.inet_aton(socket.gethostbyname(destaddr))
-            # Construct the request packet
+                # Construct the request packet
         req = struct.pack(">BBH", 0x04, 0x01, destport) + ipaddr
         # The username parameter is considered userid for SOCKS4
         if self.__proxy[4] != None:
@@ -364,7 +363,7 @@ class socksocket(socket.socket):
                 raise Socks4Error((ord(resp[1:2]), _socks4errors[ord(resp[1:2]) - 90]))
             else:
                 raise Socks4Error((94, _socks4errors[4]))
-            # Get the bound address/port
+                # Get the bound address/port
         self.__proxysockname = (socket.inet_ntoa(resp[4:]), struct.unpack(">H", resp[2:4])[0])
         if rmtrslv != None:
             self.__proxypeername = (socket.inet_ntoa(ipaddr), destport)
@@ -416,7 +415,7 @@ class socksocket(socket.socket):
         """
         # Do a minimal input check first
         if (not type(destpair) in (list, tuple)) or (len(destpair) < 2) or (
-        not isinstance(destpair[0], basestring)) or (type(destpair[1]) != int):
+            not isinstance(destpair[0], basestring)) or (type(destpair[1]) != int):
             raise GeneralProxyError((5, _generalerrors[5]))
         if self.__proxy[0] == PROXY_TYPE_SOCKS5:
             if self.__proxy[2] != None:

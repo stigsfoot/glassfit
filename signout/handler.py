@@ -24,7 +24,7 @@ from model import Credentials
 import util
 
 
-OAUTH2_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?=token=%s'
+OAUTH2_REVOKE_ENDPOINT = 'https://accounts.google.com/o/oauth2/revoke?token=%s'
 
 
 class SignoutHandler(webapp2.RequestHandler):
