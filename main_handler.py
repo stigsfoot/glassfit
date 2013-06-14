@@ -14,17 +14,14 @@
 
 """Request Handler for /main endpoint."""
 
-__author__ = 'noble.ackerson@gmail.com (Noble Ackerson)'
+__author__ = 'alainv@google.com (Alain Vongsouvanh)'
+
 
 import io
+import jinja2
 import logging
 import os
-
-import jinja2
 import webapp2
-
-#from glassfit import handler
-
 
 from google.appengine.api import memcache
 from google.appengine.api import urlfetch
@@ -44,120 +41,198 @@ jinja_environment = jinja2.Environment(
 
 
 class _BatchCallback(object):
-    """Class used to track batch request responses."""
+  """Class used to track batch request responses."""
 
-    def __init__(self):
-        """Initialize a new _BatchCallbaclk object."""
-        self.success = 0
-        self.failure = 0
+  def __init__(self):
+    """Initialize a new _BatchCallbaclk object."""
+    self.success = 0
+    self.failure = 0
 
-    def callback(self, request_id, response, exception):
-        """Method called on each HTTP Response from a batch request.
+  def callback(self, request_id, response, exception):
+    """Method called on each HTTP Response from a batch request.
 
-        For more information, see
-          https://developers.google.com/api-client-library/python/guide/batch
-        """
-        if exception is None:
-            self.success += 1
-        else:
-            self.failure += 1
-            logging.error(
-                'Failed to insert item for user %s: %s', request_id, exception)
+    For more information, see
+      https://developers.google.com/api-client-library/python/guide/batch
+    """
+    if exception is None:
+      self.success += 1
+    else:
+      self.failure += 1
+      logging.error(
+          'Failed to insert item for user %s: %s', request_id, exception)
 
 
 class MainHandler(webapp2.RequestHandler):
-    """Request Handler for the main endpoint."""
+  """Request Handler for the main endpoint."""
 
-    def _render_template(self, message=None):
-        """Render the main page template."""
-        template_values = {'userId': self.userid}
-        if message:
-            template_values['message'] = message
-            # self.mirror_service is initialized in util.auth_required.
-        try:
-            template_values['contact'] = self.mirror_service.contacts().get(
-                id='GlassFit Coach').execute()
-        except errors.HttpError:
-            logging.info('Unable to find GlassFit Coach contact.')
+  def _render_template(self, message=None):
+    """Render the main page template."""
+    template_values = {'userId': self.userid}
+    if message:
+      template_values['message'] = message
+    # self.mirror_service is initialized in util.auth_required.
+    try:
+      template_values['contact'] = self.mirror_service.contacts().get(
+        id='Python Quick Start').execute()
+    except errors.HttpError:
+      logging.info('Unable to find Python Quick Start contact.')
 
-        timeline_items = self.mirror_service.timeline().list(maxResults=3).execute()
-        template_values['timelineItems'] = timeline_items.get('items', [])
+    timeline_items = self.mirror_service.timeline().list(maxResults=3).execute()
+    template_values['timelineItems'] = timeline_items.get('items', [])
 
-        subscriptions = self.mirror_service.subscriptions().list().execute()
-        for subscription in subscriptions.get('items', []):
-            collection = subscription.get('collection')
-            if collection == 'timeline':
-                template_values['timelineSubscriptionExists'] = True
-            elif collection == 'locations':
-                template_values['locationSubscriptionExists'] = True
+    subscriptions = self.mirror_service.subscriptions().list().execute()
+    for subscription in subscriptions.get('items', []):
+      collection = subscription.get('collection')
+      if collection == 'timeline':
+        template_values['timelineSubscriptionExists'] = True
+      elif collection == 'locations':
+        template_values['locationSubscriptionExists'] = True
 
-        template = jinja_environment.get_template('templates/index.html')
-        logging.info("Rendering template: templates/index.html")
-        self.response.out.write(template.render(template_values))
+    template = jinja_environment.get_template('templates/index.html')
+    self.response.out.write(template.render(template_values))
 
-    @util.auth_required
-    def get(self):
-        """Render the main page."""
-        # Get the flash message and delete it.
-        message = memcache.get(key=self.userid)
-        memcache.delete(key=self.userid)
-        self._render_template(message)
+  @util.auth_required
+  def get(self):
+    """Render the main page."""
+    # Get the flash message and delete it.
+    message = memcache.get(key=self.userid)
+    memcache.delete(key=self.userid)
+    self._render_template(message)
 
-    @util.auth_required
-    def post(self):
-        """Execute the request and render the template."""
-        operation = self.request.get('operation')
-        # Dict of operations to easily map keys to methods.
-        operations = {
-            'sendStretchCards': self.sendStretchCards,
-            'sendWarmups': self.sendWarmups,
-            'sendWorkouts': self.sendWorkouts
-        }
-        if operation in operations:
-            message = operations[operation]()
-        else:
-            message = "I don't know how to " + operation
-            # Store the flash message for 5 seconds.
-        memcache.set(key=self.userid, value=message, time=5)
-        self.redirect('/')
+  @util.auth_required
+  def post(self):
+    """Execute the request and render the template."""
+    operation = self.request.get('operation')
+    # Dict of operations to easily map keys to methods.
+    operations = {
+        'insertSubscription': self._insert_subscription,
+        'deleteSubscription': self._delete_subscription,
+        'insertItem': self._insert_item,
+        'insertItemWithAction': self._insert_item_with_action,
+        'insertItemAllUsers': self._insert_item_all_users,
+        'insertContact': self._insert_contact,
+        'deleteContact': self._delete_contact
+    }
+    if operation in operations:
+      message = operations[operation]()
+    else:
+      message = "I don't know how to " + operation
+    # Store the flash message for 5 seconds.
+    memcache.set(key=self.userid, value=message, time=5)
+    self.redirect('/')
 
-    def getWorkouts(self):
-        workouts = {}
+  def _insert_subscription(self):
+    """Subscribe the app."""
+    # self.userid is initialized in util.auth_required.
+    body = {
+        'collection': self.request.get('collection', 'timeline'),
+        'userToken': self.userid,
+        'callbackUrl': util.get_full_url(self, '/notify')
+    }
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.subscriptions().insert(body=body).execute()
+    return 'Application is now subscribed to updates.'
 
-        """Functionality to generate workouts"""
+  def _delete_subscription(self):
+    """Unsubscribe from notifications."""
+    collection = self.request.get('subscriptionId')
+    self.mirror_service.subscriptions().delete(id=collection).execute()
+    return 'Application has been unsubscribed.'
 
-        return workouts
+  def _insert_item(self):
+    """Insert a timeline item."""
+    logging.info('Inserting timeline item')
+    body = {
+        'notification': {'level': 'DEFAULT'}
+    }
+    if self.request.get('html') == 'on':
+      body['html'] = [self.request.get('message')]
+    else:
+      body['text'] = self.request.get('message')
 
-    def createWorkouts(self, workouts):
-        """Functionality to create a workout bundle"""
-        workoutBundle = []
+    media_link = self.request.get('imageUrl')
+    if media_link:
+      if media_link.startswith('/'):
+        media_link = util.get_full_url(self, media_link)
+      resp = urlfetch.fetch(media_link, deadline=20)
+      media = MediaIoBaseUpload(
+          io.BytesIO(resp.content), mimetype='image/jpeg', resumable=True)
+    else:
+      media = None
 
-        workout_bundle_body = {
-            'html': ("<article class=\"photo\">"
-                     "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
-                     "  <section>"
-                     "    <p class=\"text-auto-size black\">Sample Workout</p>"
-                     "  </section>"
-                     "</article>"),
-            'bundleID': '2718281828',
-            'isBundleCover': True,
-            'notification': {
-                'level': 'DEFAULT'
-            }
-        }
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.timeline().insert(body=body, media_body=media).execute()
+    return  'A timeline item has been inserted.'
 
+  def _insert_item_with_action(self):
+    """Insert a timeline item user can reply to."""
+    logging.info('Inserting timeline item')
+    body = {
+        'creator': {
+            'displayName': 'Python Starter Project',
+            'id': 'PYTHON_STARTER_PROJECT'
+        },
+        'text': 'Tell me what you had for lunch :)',
+        'notification': {'level': 'DEFAULT'},
+        'menuItems': [{'action': 'REPLY'}]
+    }
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.timeline().insert(body=body).execute()
+    return 'A timeline item with action has been inserted.'
 
-    def sendWorkouts(self):
-        """Insert timeline items."""
-        logging.info('Inserting timeline item')
+  def _insert_item_all_users(self):
+    """Insert a timeline item to all authorized users."""
+    logging.info('Inserting timeline item to all users')
+    users = Credentials.all()
+    total_users = users.count()
 
-        workouts = self.getWorkouts()
-        workout_cards = self.createWorkouts(workouts)
+    if total_users > 10:
+      return 'Total user count is %d. Aborting broadcast to save your quota' % (
+          total_users)
+    body = {
+        'text': 'Hello Everyone!',
+        'notification': {'level': 'DEFAULT'}
+    }
 
-        for body in workout_cards:
-            # self.mirror_service is initialized in util.auth_required.
-            self.mirror_service.timeline().insert(body=body).execute()
-            return 'A workout timeline item has been inserted.'
+    batch_responses = _BatchCallback()
+    batch = BatchHttpRequest(callback=batch_responses.callback)
+    for user in users:
+      creds = StorageByKeyName(
+          Credentials, user.key().name(), 'credentials').get()
+      mirror_service = util.create_service('mirror', 'v1', creds)
+      batch.add(
+          mirror_service.timeline().insert(body=body),
+          request_id=user.key().name())
+
+    batch.execute(httplib2.Http())
+    return 'Successfully sent cards to %d users (%d failed).' % (
+        batch_responses.success, batch_responses.failure)
+
+  def _insert_contact(self):
+    """Insert a new Contact."""
+    logging.info('Inserting contact')
+    name = self.request.get('name')
+    image_url = self.request.get('imageUrl')
+    if not name or not image_url:
+      return 'Must specify imageUrl and name to insert contact'
+    else:
+      if image_url.startswith('/'):
+        image_url = util.get_full_url(self, image_url)
+      body = {
+          'id': name,
+          'displayName': name,
+          'imageUrls': [image_url]
+      }
+      # self.mirror_service is initialized in util.auth_required.
+      self.mirror_service.contacts().insert(body=body).execute()
+      return 'Inserted contact: ' + name
+
+  def _delete_contact(self):
+    """Delete a Contact."""
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.contacts().delete(
+        id=self.request.get('id')).execute()
+    return 'Contact has been deleted.'
 
 
 MAIN_ROUTES = [
