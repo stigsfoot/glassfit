@@ -139,6 +139,14 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
                      "    <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
                      "  </section>"
                      "</article>"),
+            "htmlPages": [
+                     "<article class=\"photo\">"
+                     "  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
+                     "  <section>"
+                     "    <p class=\"text-auto-size black\">Be sure to fully stretch for 10 mins.</p>"
+                     "  </section>"
+                     "</article>"
+            ],
             "menuItems": [{
                               "action": "CUSTOM",
                               "id": "warmup",
