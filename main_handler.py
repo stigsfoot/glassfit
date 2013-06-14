@@ -92,6 +92,7 @@ class MainHandler(webapp2.RequestHandler):
                 template_values['locationSubscriptionExists'] = True
 
         template = jinja_environment.get_template('templates/index.html')
+        logging.info("Rendering template: templates/index.html")
         self.response.out.write(template.render(template_values))
 
     @util.auth_required

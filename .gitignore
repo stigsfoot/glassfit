@@ -32,3 +32,8 @@
 -.mr.developer.cfg
 -.project
 -.pydevproject
+
+*.pyc
+*.iml
+*.bak
+.idea/**
