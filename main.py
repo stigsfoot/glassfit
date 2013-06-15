@@ -29,10 +29,11 @@ from main_handler import MAIN_ROUTES
 from notify.handler import NOTIFY_ROUTES
 from oauth.handler import OAUTH_ROUTES
 from signout.handler import SIGNOUT_ROUTES
-
+from glassfit.workout import WORKOUT_PATHS
+from glassfit.debug import DEBUG_PATHS
 
 ROUTES = (
     ATTACHMENT_PROXY_ROUTES + MAIN_ROUTES + NOTIFY_ROUTES + OAUTH_ROUTES +
-    SIGNOUT_ROUTES)
+    SIGNOUT_ROUTES + WORKOUT_PATHS + DEBUG_PATHS)
 
 app = webapp2.WSGIApplication(ROUTES)
