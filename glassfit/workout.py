@@ -1,8 +1,10 @@
 import logging
 import webapp2
+from datetime import datetime
 from os import path
 import util
 import time
+from oauth2client.anyjson import simplejson
 # need this module to format datetime's per google's wishes
 from feed.date import rfc3339
 
@@ -41,7 +43,8 @@ class Card(webapp2.RequestHandler):
             body={
                 'text': 'Finished exercise. Should have waited {s} seconds'.format(s=duration),
                 'notification': {
-                    'deliveryTime': rfc3339.timestamp_from_tf(timestamp_after_duration),
+                    # TODO - ask on stackoverflow or something
+                    # 'deliveryTime': rfc3339.timestamp_from_tf(timestamp_after_duration),
                     'level': 'DEFAULT'
                 },
             }
