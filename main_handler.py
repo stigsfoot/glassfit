@@ -140,10 +140,10 @@ class MainHandler(webapp2.RequestHandler):
     def _insert_item(self):
         """Insert a timeline item."""
         logging.info('Inserting timeline item')
-        body = {
+        body = { # preparing the glass payload
             'notification': {'level': 'DEFAULT'}
         }
-        if self.request.get('html') == 'on':
+        if self.request.get('html') == 'on': # TODO find who sets this?
             body['html'] = [self.request.get('message')]
         else:
             body['text'] = self.request.get('message')
