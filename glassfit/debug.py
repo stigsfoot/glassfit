@@ -14,9 +14,7 @@ def format_timestamp(stamp):
     tf = rfc3339.timestamp_from_tf(stamp)
     return re.sub(r'''-\d\d:\d\d''', '.561Z', tf)
 
-def get_url(self, path):
-    """Like get_full_url but also wraps the url with a proxy"""
-    return util.get_full_url(self, path)
+def get_proxy_url(path):
     proxy = "https://mirrornotifications.appspot.com/forward?url=http://glassproxy.herokuapp.com{url}"
     proxy_url = proxy.format(url=path)
     logging.info("Proxying to {u}".format(u=proxy_url))
