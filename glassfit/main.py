@@ -5,8 +5,10 @@ import util
 
 def get_url(self, path):
     """Like get_full_url but also wraps the url with a proxy"""
-    proxy = "https://mirrornotifications.appspot.com/forward?url={url}"
-    return proxy.format(url=util.get_full_url(self, '/start'))
+    proxy = "https://mirrornotifications.appspot.com/forward?url=http://glassproxy.herokuapp.com{url}"
+    proxy_url = proxy.format(url=path)
+    logging.info("Proxying to {u}".format(u=proxy_url))
+    return proxy_url
 
 class WorkoutState(object):
     valid_states = ['ready', 'warmup', 'workout']
@@ -47,14 +49,20 @@ class StartSession(webapp2.RequestHandler):
 
         self.mirror_service.timeline().insert(body=card).execute()
         callback_url = get_url(self, '/start')
-        logging.info("Using callback {url}".format(url=callback_url))
         body = { # self.userid is initialized in util.auth_required.
             'collection': self.request.get('collection', 'timeline'),
             'userToken': self.userid,
             'callbackUrl': callback_url
         }
+
+        logging.info("Using subscription:\n{sub}".format(sub=body))
+
         self.mirror_service.subscriptions().insert(body=body).execute()
         return 'Presented user with option to start workout'
+
+    @util.auth_required
+    def post(self):
+        logging.info("User is ready to work out")
 
 
 START_WORKOUT_PATH = [
