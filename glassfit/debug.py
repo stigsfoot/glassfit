@@ -4,19 +4,8 @@ import json
 import webapp2
 import util
 
-# class WithSession(webapp2.RequestHandler):
-#     """A handler that extends WithSession can access the current session with self.session"""
-#
-#     def dispatch(self):
-#         self.session_store = sessions.get_store(request=self.request)
-#         try:
-#             webapp2.RequestHandler.dispatch(self)
-#         finally:
-#             self.session_store.save_sessions(self.response)
-#
-#     @webapp2.cached_property
-#     def session(self):
-#         return self.session_store.get_session()
+# for now we are using this class for catchall stuff. probably the wrong
+# place for this
 
 
 def show_current_timeline_card(mirror_service, last_x=1):
