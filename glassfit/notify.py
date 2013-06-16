@@ -9,12 +9,13 @@ class NotifyHandler(object):
             u'finished_exercise': self.finished_exercise,
         }
 
-        self.event = event
+        self.event = event['payload']
         self.payload = payload
 
         self.request_handler = request_handler
         self.mirror_service = request_handler.mirror_service
-        self.dispatch(event)
+
+        self.dispatch(self.event)
 
     def dispatch(self, event):
         self.__table.get(event, self.unknown)()

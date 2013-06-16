@@ -27,8 +27,7 @@ from oauth2client.appengine import StorageByKeyName
 from model import Credentials
 import util
 
-import glassfit
-
+from glassfit import notify as gnotify
 
 class NotifyHandler(webapp2.RequestHandler):
     """Request Handler for notification pings."""
@@ -91,7 +90,7 @@ class NotifyHandler(webapp2.RequestHandler):
                 break
             else:
                 logging.info("Dispatching %s to glassfit", user_action)
-                glassfit.notify.NotifyHandler(self, user_action, data)
+                gnotify.NotifyHandler(self, user_action, data)
 
 
 NOTIFY_ROUTES = [
