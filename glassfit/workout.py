@@ -37,17 +37,19 @@ class Card(webapp2.RequestHandler):
 
         logging.info("Notification will occur in {time}".format(time=timestamp_after_duration))
 
-        logging.info("Using timestamp {s}".format(s=format_timestamp(timestamp_after_duration)))
+        rfc3339 = format_timestamp(timestamp_after_duration)
 
-        self.mirror_service.timeline().insert(
-                body={
-                    'text': 'Finished exercise. Should have waited {s} seconds'.format(s=duration),
-                    'notification': {
-                        'deliveryTime': format_timestamp(timestamp_after_duration),
-                        'level': 'DEFAULT'
-                        },
-                    }
-                ).execute()
+        logging.info("Using timestamp {s}".format(s=rfc3339))
+
+        self.mirror_service.timeline().insert( body={
+            'text': 'Finished exercise. Should have waited {s} seconds' \
+                    .format(s=duration),
+            'notification': {
+                'deliveryTime': rfc3339,
+                'level': 'DEFAULT'
+                },
+            }
+        ).execute()
 
 
 WORKOUT_PATHS = [
