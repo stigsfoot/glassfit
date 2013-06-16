@@ -57,7 +57,7 @@ class StartSession(webapp2.RequestHandler):
 
     @util.auth_required
     def post(self):
-        logging.info("User is ready to work out")
+        logging.info("XXX - User is ready to work out")
 
 
 START_WORKOUT_PATH = [
