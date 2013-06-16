@@ -30,6 +30,14 @@ class LastCards(webapp2.RequestHandler):
         self.response.write(json.dumps(timeline_items))
 
 
+class LastSubscriptions(webapp2.RequestHandler):
+    @util.auth_required
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.write(json.dumps(self.mirror_service.subscriptions().list().execute()))
+
+
 DEBUG_PATHS = [
-    ('/debug', LastCards)
+    ('/d/cards', LastCards),
+    ('/d/subs', LastSubscriptions)
 ]
