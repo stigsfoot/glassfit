@@ -1,12 +1,11 @@
 import logging
 import webapp2
-from datetime import datetime
 from os import path
 import util
 import time
-from oauth2client.anyjson import simplejson
+from debug import format_timestamp
+
 # need this module to format datetime's per google's wishes
-from feed.date import rfc3339
 
 # A workout card is intended to
 # 1. display a workout animated gif
@@ -25,7 +24,6 @@ def workout_template(workout):
 def body(workout):
     return {'text': 'Working out: doing {w}'.format(w=workout)}
 
-
 class Card(webapp2.RequestHandler):
     @util.auth_required
     def get(self, workout_name, duration):
@@ -39,18 +37,19 @@ class Card(webapp2.RequestHandler):
 
         logging.info("Notification will occur in {time}".format(time=timestamp_after_duration))
 
+        logging.info("Using timestamp {s}".format(s=format_timestamp(timestamp_after_duration)))
+
         self.mirror_service.timeline().insert(
-            body={
-                'text': 'Finished exercise. Should have waited {s} seconds'.format(s=duration),
-                'notification': {
-                    # TODO - ask on stackoverflow or something
-                    # 'deliveryTime': rfc3339.timestamp_from_tf(timestamp_after_duration),
-                    'level': 'DEFAULT'
-                },
-            }
-        ).execute()
+                body={
+                    'text': 'Finished exercise. Should have waited {s} seconds'.format(s=duration),
+                    'notification': {
+                        'deliveryTime': format_timestamp(timestamp_after_duration),
+                        'level': 'DEFAULT'
+                        },
+                    }
+                ).execute()
 
 
 WORKOUT_PATHS = [
-    ('/workout/(.+)/(\d+)', Card)
+        ('/workout/(.+)/(\d+)', Card)
 ]
