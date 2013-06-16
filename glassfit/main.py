@@ -3,12 +3,7 @@ import json
 import webapp2
 import util
 
-def get_url(self, path):
-    """Like get_full_url but also wraps the url with a proxy"""
-    proxy = "https://mirrornotifications.appspot.com/forward?url=http://glassproxy.herokuapp.com{url}"
-    proxy_url = proxy.format(url=path)
-    logging.info("Proxying to {u}".format(u=proxy_url))
-    return proxy_url
+from debug import get_url
 
 class WorkoutState(object):
     valid_states = ['ready', 'warmup', 'workout']
