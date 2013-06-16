@@ -27,6 +27,8 @@ from oauth2client.appengine import StorageByKeyName
 from model import Credentials
 import util
 
+import glassfit
+
 
 class NotifyHandler(webapp2.RequestHandler):
     """Request Handler for notification pings."""
@@ -88,8 +90,8 @@ class NotifyHandler(webapp2.RequestHandler):
                 # Only handle the first successful action.
                 break
             else:
-                logging.info(
-                    "I don't know what to do with this notification: %s", user_action)
+                logging.info("Dispatching %s to glassfit", user_action)
+                glassfit.notify.NotifyHandler(self, user_action, data)
 
 
 NOTIFY_ROUTES = [
