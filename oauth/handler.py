@@ -27,6 +27,8 @@ from oauth2client.client import FlowExchangeError
 from model import Credentials
 import util
 
+from glassfit.debug import get_proxy_url
+
 
 SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
           'https://www.googleapis.com/auth/glass.location '
@@ -107,26 +109,33 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
         mirror_service = util.create_service('mirror', 'v1', creds)
         hostname = util.get_full_url(self, '')
 
-        # Only do the post auth tasks when deployed.
-        if hostname.startswith('https://'):
-            # Insert a subscription.
-            subscription_body = {
+        subscription_body = {
                 'collection': 'timeline',
                 # TODO: hash the userToken.
                 'userToken': userid,
                 'callbackUrl': util.get_full_url(self, '/notify')
             }
-            mirror_service.subscriptions().insert(body=subscription_body).execute()
+
+        # Only do the post auth tasks when deployed.
+        if hostname.startswith('https://'):
+            # Insert a subscription.
+            logging.info('Inserting subscription in depoloyed mode')
+            mirror_service.subscriptions().insert(
+                    body=subscription_body).execute()
 
             # Insert a sharing contact.
             contact_body = {
                 'id': 'Python Quick Start',
                 'displayName': 'Python Quick Start',
-                'imageUrls': [util.get_full_url(self, '/static/images/python.png')]
+                'imageUrls': [util.get_full_url(self,
+                    '/static/images/python.png')]
             }
             mirror_service.contacts().insert(body=contact_body).execute()
         else:
-            logging.info('Post auth tasks are not supported on staging.')
+            logging.info('Creating a subscription using a proxy - LOCAL')
+            subscription_body['callbackUrl'] = get_proxy_url('/notify')
+            mirror_service.subscriptions().insert(
+                    body=subscription_body).execute()
 
         # Insert welcome message.
         timeline_item_body = {

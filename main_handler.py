@@ -121,6 +121,7 @@ class MainHandler(webapp2.RequestHandler):
 
     def _insert_subscription(self):
         """Subscribe the app."""
+        logging.info('--- Inserting subscription')
         # self.userid is initialized in util.auth_required.
         body = {
             'collection': self.request.get('collection', 'timeline'),
