@@ -37,6 +37,9 @@ def get_full_url(request_handler, path):
     pr = urlparse(request_handler.request.url)
     return '%s://%s%s' % (pr.scheme, pr.netloc, path)
 
+def is_deployed(request_handler):
+    return get_full_url(request_handler, '').startswith('https://')
+
 
 def load_session_credentials(request_handler):
     """Load credentials from the current session."""
