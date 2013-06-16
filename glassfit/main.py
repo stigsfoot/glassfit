@@ -3,8 +3,6 @@ import json
 import webapp2
 import util
 
-from debug import get_url
-
 class WorkoutState(object):
     valid_states = ['ready', 'warmup', 'workout']
 
@@ -42,23 +40,19 @@ class StartSession(webapp2.RequestHandler):
                           }],
         }
 
+
         self.mirror_service.timeline().insert(body=card).execute()
-        callback_url = get_url(self, '/start')
-        body = { # self.userid is initialized in util.auth_required.
-            'collection': self.request.get('collection', 'timeline'),
-            'userToken': self.userid,
-            'callbackUrl': callback_url
-        }
+        #callback_url = get_proxy_url('/start')
+        #body = { # self.userid is initialized in util.auth_required.
+            #'collection': 'timeline',
+            #'userToken': self.userid,
+            #'callbackUrl': callback_url
+        #}
 
-        logging.info("Using subscription:\n{sub}".format(sub=body))
+        #logging.info("Using subscription:\n{sub}".format(sub=body))
 
-        self.mirror_service.subscriptions().insert(body=body).execute()
-        return 'Presented user with option to start workout'
-
-    @util.auth_required
-    def post(self):
-        logging.info("XXX - User is ready to work out")
-
+        #self.mirror_service.subscriptions().insert(body=body).execute()
+        self.response.write('User start workout')
 
 START_WORKOUT_PATH = [
     ('/start', StartSession)
