@@ -15,7 +15,8 @@ def format_timestamp(stamp):
     return re.sub(r'''-\d\d:\d\d''', '.561Z', tf)
 
 def show_current_timeline_card(mirror_service, last_x=1):
-    timeline = mirror_service.timeline().list(maxResults=last_x).execute()['items']
+    timeline = mirror_service.timeline().list(maxResults=last_x) \
+            .execute()['items']
     pprint(timeline)
     logging.info("Look the current timeline item over here")
 
@@ -26,7 +27,8 @@ class LastCards(webapp2.RequestHandler):
     @util.auth_required
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
-        timeline_items = self.mirror_service.timeline().list().execute()['items']
+        timeline_items = self.mirror_service.timeline(). \
+                list().execute()['items']
         self.response.write(json.dumps(timeline_items))
 
 
@@ -34,10 +36,11 @@ class LastSubscriptions(webapp2.RequestHandler):
     @util.auth_required
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.write(json.dumps(self.mirror_service.subscriptions().list().execute()))
+        self.response.write(json.dumps(self.mirror_service \
+                .subscriptions().list().execute()))
 
 
 DEBUG_PATHS = [
-    ('/d/cards', LastCards),
-    ('/d/subs', LastSubscriptions)
-]
+        ('/d/cards', LastCards),
+        ('/d/subs', LastSubscriptions)
+        ]
