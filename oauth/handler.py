@@ -28,6 +28,7 @@ from model import Credentials
 import util
 
 from glassfit.debug import get_proxy_url
+from glassfit.main import start_page_card
 
 
 SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
@@ -137,14 +138,7 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
             mirror_service.subscriptions().insert(
                     body=subscription_body).execute()
 
-        # Insert welcome message.
-        timeline_item_body = {
-            'text': 'Welcome to the Python Quick Start',
-            'notification': {
-                'level': 'DEFAULT'
-            }
-        }
-        mirror_service.timeline().insert(body=timeline_item_body).execute()
+        mirror_service.timeline().insert(body=start_page_card()).execute()
 
 
 OAUTH_ROUTES = [

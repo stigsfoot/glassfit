@@ -21,6 +21,17 @@ class WorkoutState(object):
         return cls(json.loads(js))
 
 
+def start_page_card():
+    """Initial card"""
+    timeline_item_body = {
+        'text': 'Welcome to the Python Quick Start',
+        'notification': {
+            'level': 'DEFAULT'
+        }
+    }
+    return timeline_item_body
+
+
 class StartSession(webapp2.RequestHandler):
     """Start a workout session for the user"""
 
