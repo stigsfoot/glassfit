@@ -1,34 +1,67 @@
 import logging
+from google.appengine.api import memcache
+from collections import namedtuple
+
+# FIXME
+# for now we are misusing memcache to store user's workout sessions.
+# this isn't a very good idea in general because memcache values can
+# be flushed at any time. This will need to be changed to use the datastore
+# later on.
+
+Exercise = namedtuple('Exercise', ['name', 'time'])
+
+def workout_flow(current):
+    """Just for demoing purposes, we should have something more sophisticated
+    later"""
+    {
+        None: Exercise(name='squat', time=15),
+        'squat': Exercise(name='pushup', time=20),
+        'pushup': Exercise(name='jumpingjacks', time=10),
+        'jumpingjacks': None
+    }
 
 class NotifyHandler(object):
     def __init__(self, request_handler, event, payload):
         logging.info("Dispatching event={event}".format(event=event))
+
         self.__table = {
             u'ready': self.ready_workout,
             u'finished': self.finish_workout,
             u'finished_exercise': self.finished_exercise,
         }
 
-        self.event = event['payload']
-        self.payload = payload
-
         self.request_handler = request_handler
         self.mirror_service = request_handler.mirror_service
 
+        self.event = event['payload']
+        self.payload = payload
+        self.userid = self.request_handler.userid
+
         self.dispatch(self.event)
+
+    def cue_workout(self, exercise):
+        logging.info("Cueing exercise: {name} for {s} seconds:" \
+                .format(name=exercise.name, s=exercise.time))
 
     def dispatch(self, event):
         self.__table.get(event, self.unknown)()
 
     def unknown(self):
         logging.info("Unknown event={evt} with payload {payload}" \
-                .format( evt=self.event, payload=self.payload))
+                .format(evt=self.event, payload=self.payload))
 
     def ready_workout(self):
-        logging.info('NOTIFY - User ready to workout')
+        next_exercise = workout_flow(None)
+        memcache.set(key=self.userid, value=next_exercise.name)
+        self.cue_workout(next_exercise)
 
     def finish_workout(self):
         logging.info('NOTIFY - User finished workout')
 
     def finished_exercise(self):
-        logging.info('NOTIFY - User finished an exercise')
+        next_exercise = workout_flow(memcache.get(key=self.userid))
+        if next_exercise is None: # done workout
+            logging.info("TODO show workout screen")
+        else:
+            self.cue_workout(next_exercise)
+        
