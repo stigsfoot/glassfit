@@ -3,16 +3,15 @@ from pprint import pprint
 import json
 import webapp2
 import util
-from feed.date import rfc3339
+import rfc3339
+from datetime import timedelta
 
 # for now we are using this class for catchall stuff. probably the wrong
 # place for this
 
-def format_timestamp(stamp):
-    """format timestamp according to google"""
-    import re
-    tf = rfc3339.timestamp_from_tf(stamp)
-    return re.sub(r'''-\d\d:\d\d''', '.561Z', tf)
+def timestamp_after(date, after):
+    return rfc3339.format(date + timedelta(seconds=after), utc=True) \
+                    .replace('Z','.0Z')
 
 def get_proxy_url(path):
     proxy = "https://mirrornotifications.appspot.com/forward?url=http://glassproxy.herokuapp.com{url}"

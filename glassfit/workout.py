@@ -3,7 +3,8 @@ import webapp2
 from os import path
 import util
 import time
-from debug import format_timestamp
+from debug import timestamp_after
+from datetime import datetime
 
 # need this module to format datetime's per google's wishes
 
@@ -34,20 +35,17 @@ class Card(webapp2.RequestHandler):
         logging.info("Rendering: {path}".format(path=template_path))
         self.mirror_service.timeline().insert(body=body(workout_name)).execute()
 
-        timestamp_after_duration = int(time.mktime(time.gmtime())) + int(duration)
+        timestamp_after_duration = timestamp_after(datetime.now(),
+                int(duration))
 
         logging.info("Notification will occur in {time}" \
                 .format(time=timestamp_after_duration))
-
-        rfc3339 = format_timestamp(timestamp_after_duration)
-
-        logging.info("Using timestamp {s}".format(s=rfc3339))
 
         card = self.mirror_service.timeline().insert(body={
             'text': 'Finished exercise. Should have waited {s} seconds' \
                     .format(s=duration),
             'notification': {
-                    'deliveryTime': rfc3339,
+                    'deliveryTime': timestamp_after_duration,
                     'level': 'DEFAULT'
                 },
             }
