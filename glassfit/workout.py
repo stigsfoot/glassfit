@@ -24,6 +24,7 @@ def workout_template(workout):
 def body(workout):
     return {'text': 'Working out: doing {w}'.format(w=workout)}
 
+
 class Card(webapp2.RequestHandler):
     @util.auth_required
     def get(self, workout_name, duration):
@@ -35,21 +36,28 @@ class Card(webapp2.RequestHandler):
 
         timestamp_after_duration = int(time.mktime(time.gmtime())) + int(duration)
 
-        logging.info("Notification will occur in {time}".format(time=timestamp_after_duration))
+        logging.info("Notification will occur in {time}" \
+                .format(time=timestamp_after_duration))
 
         rfc3339 = format_timestamp(timestamp_after_duration)
 
         logging.info("Using timestamp {s}".format(s=rfc3339))
 
-        self.mirror_service.timeline().insert( body={
+        card = self.mirror_service.timeline().insert(body={
             'text': 'Finished exercise. Should have waited {s} seconds' \
                     .format(s=duration),
             'notification': {
-                'deliveryTime': rfc3339,
-                'level': 'DEFAULT'
+                    'deliveryTime': rfc3339,
+                    'level': 'DEFAULT'
                 },
             }
         ).execute()
+
+        logging.info("Sent a workout card %s", card)
+        logging.info('Sleeping for 2.0 seconds and then cancelling')
+        time.sleep(2.0)
+        self.mirror_service.timeline().delete(id=card['id']).execute()
+        logging.info('Deleted card')
 
 
 WORKOUT_PATHS = [
