@@ -23,8 +23,10 @@ class WorkoutState(object):
 
 def start_page_card():
     """Initial card"""
+    # TODO probably should some sort of a menu for the user here?
+    # or maybe just immediately start a workout?
     timeline_item_body = {
-        'text': 'Welcome to the Python Quick Start',
+        'text': 'Welcome to Glassfit. -- Menu here --',
         'notification': {
             'level': 'DEFAULT'
         }
