@@ -53,18 +53,7 @@ class StartSession(webapp2.RequestHandler):
                           }],
         }
 
-
         self.mirror_service.timeline().insert(body=card).execute()
-        #callback_url = get_proxy_url('/start')
-        #body = { # self.userid is initialized in util.auth_required.
-            #'collection': 'timeline',
-            #'userToken': self.userid,
-            #'callbackUrl': callback_url
-        #}
-
-        #logging.info("Using subscription:\n{sub}".format(sub=body))
-
-        #self.mirror_service.subscriptions().insert(body=body).execute()
         self.response.write('User start workout')
 
 START_WORKOUT_PATH = [
