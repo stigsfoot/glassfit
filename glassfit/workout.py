@@ -60,5 +60,5 @@ class Card(webapp2.RequestHandler):
 
 
 WORKOUT_PATHS = [
-        ('/workout/(.+)/(\d+)', Card)
+    ('/workout/(.+)/(\d+)', Card)
 ]

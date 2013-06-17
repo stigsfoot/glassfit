@@ -47,6 +47,6 @@ class LastSubscriptions(webapp2.RequestHandler):
 
 
 DEBUG_PATHS = [
-        ('/d/cards', LastCards),
-        ('/d/subs', LastSubscriptions)
-        ]
+    ('/d/cards', LastCards),
+    ('/d/subs', LastSubscriptions)
+]
