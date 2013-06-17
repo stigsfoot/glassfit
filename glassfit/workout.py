@@ -30,7 +30,8 @@ class Card(webapp2.RequestHandler):
     @util.auth_required
     def get(self, workout_name, duration):
         """Render a workout card from a workout_name and a duration"""
-        logging.info("Attempting to workout: {w} for {d}".format(w=workout_name, d=duration))
+        logging.info("Attempting to workout: {w} for {d}" \
+                .format(w=workout_name, d=duration))
         template_path = workout_template(workout_name)
         logging.info("Rendering: {path}".format(path=template_path))
         self.mirror_service.timeline().insert(body=body(workout_name)).execute()

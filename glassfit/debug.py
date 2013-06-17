@@ -11,7 +11,7 @@ from datetime import timedelta
 
 def timestamp_after(date, after):
     return rfc3339.format(date + timedelta(seconds=after), utc=True) \
-                    .replace('Z','.0Z')
+            .replace('Z','.0Z')
 
 def get_proxy_url(path):
     proxy = "https://mirrornotifications.appspot.com/forward?url=http://glassproxy.herokuapp.com{url}"
