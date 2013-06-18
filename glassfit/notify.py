@@ -2,6 +2,12 @@ import logging
 from google.appengine.api import memcache
 from collections import namedtuple
 
+from datetime import datetime
+from debug import timestamp_after
+
+from glassfit import proto
+
+
 # FIXME
 # for now we are misusing memcache to store user's workout sessions.
 # this isn't a very good idea in general because memcache values can
@@ -9,6 +15,15 @@ from collections import namedtuple
 # later on.
 
 Exercise = namedtuple('Exercise', ['name', 'time'])
+
+def body(workout):
+    return {'text': 'Working out: doing {w}'.format(w=workout)}
+
+workouts = [
+    Exercise(name='squat', time=15),
+    Exercise(name='pushup', time=20),
+    Exercise(name='jumpingjacks', time=10)
+]
 
 def workout_flow(current):
     """Just for demoing purposes, we should have something more sophisticated
@@ -28,6 +43,7 @@ class NotifyHandler(object):
             u'ready': self.ready_workout,
             u'finished': self.finish_workout,
             u'finished_exercise': self.finished_exercise,
+            u'cancel': self.cancel_all_workouts
         }
 
         self.request_handler = request_handler
@@ -38,6 +54,18 @@ class NotifyHandler(object):
         self.userid = self.request_handler.userid
 
         self.dispatch(self.event)
+
+    def cancel_all_workouts(self):
+        userid = self.request_handler.userid
+        proto.cancel_workouts(userid, lambda w_id:
+                self.mirror_service.timeline().delete(id=w_id).execute())
+
+    def schedule_workout(self, body, after):
+        body['notification'] = {
+            'deliveryTime': timestamp_after(datetime.now(), after),
+            'level': 'DEFAULT'
+        }
+        self.mirror_service.timeline().insert(body=body).execute()
 
     def cue_workout(self, exercise):
         logging.info("Cueing exercise: {name} for {s} seconds:" \
@@ -51,9 +79,11 @@ class NotifyHandler(object):
                 .format(evt=self.event, payload=self.payload))
 
     def ready_workout(self):
-        next_exercise = workout_flow(None)
-        memcache.set(key=self.userid, value=next_exercise.name)
-        self.cue_workout(next_exercise)
+        current = 0
+        for w in workouts:
+            self.schedule_workout(body(w.name), current)
+            current += w.time
+        self.mirror_service.timeline().insert(body={'text': 'finished'}).execute()
 
     def finish_workout(self):
         logging.info('NOTIFY - User finished workout')
