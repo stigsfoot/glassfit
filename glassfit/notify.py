@@ -51,12 +51,12 @@ class NotifyHandler(object):
 
         self.event = event['payload']
         self.payload = payload
-        self.userid = self.request_handler.userid
+        self.userid = event['userToken']
 
         self.dispatch(self.event)
 
     def cancel_all_workouts(self):
-        userid = self.request_handler.userid
+        userid = self.userid
         proto.cancel_workouts(userid, lambda w_id:
                 self.mirror_service.timeline().delete(id=w_id).execute())
 

@@ -31,7 +31,8 @@ def create_card_body(workout, delivery_time):
     if delivery_time is not None:
         body['notification'] = {
             # displayTime/deliveryTime is the other thing we can try
-            'displayTime': delivery_time,
+            #'displayTime': delivery_time,
+            'deliveryTime': delivery_time,
             'level': 'DEFAULT'
         }
     return body
