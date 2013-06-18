@@ -24,7 +24,7 @@ def create_card_body(workout, delivery_time):
             'id': 'cancel',
             'values': [{
                 'displayName': 'Cancel!',
-                'iconUrl': 'http://imgur.com/cancel.jpg'
+                'iconUrl': 'http://i.imgur.com/dkvdDby.png'
             }],
         }],
     }
