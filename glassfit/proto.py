@@ -70,7 +70,7 @@ def cancel_workouts(userid, cancel):
             cancel(workout_id) # error handling should be done in cancel
     except Exception:
         logging.warn('Cancel did not handle exception:')
-        logging.warn(traceback.format_exc)
+        logging.warn(traceback.format_exc())
 
 class StartPrototype(webapp2.RequestHandler):
     @util.auth_required

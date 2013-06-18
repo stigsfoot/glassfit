@@ -37,6 +37,7 @@ def workout_flow(current):
 
 class NotifyHandler(object):
     def __init__(self, request_handler, event, payload, userid):
+        logging.info("User %s", userid)
         logging.info("Dispatching event={event}".format(event=event))
 
         self.__table = {
