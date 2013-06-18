@@ -30,7 +30,8 @@ def create_card_body(workout, delivery_time):
     }
     if delivery_time is not None:
         body['notification'] = {
-            'deliveryTime': delivery_time,
+            # displayTime/deliveryTime is the other thing we can try
+            'displayTime': delivery_time,
             'level': 'DEFAULT'
         }
     return body
@@ -73,6 +74,8 @@ def cancel_workouts(userid, cancel):
 class StartPrototype(webapp2.RequestHandler):
     @util.auth_required
     def get(self):
+        cancel_workouts(self.userid, lambda w_id:
+                self.mirror_service.timeline().delete(id=w_id).execute())
         workout_ids = schedule_workouts(workouts,
                 lambda body: self.mirror_service.timeline() \
                     .insert(body=body).execute())
