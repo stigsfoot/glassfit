@@ -37,6 +37,7 @@ class NotifyHandler(webapp2.RequestHandler):
         logging.info('Got a notification with payload %s', self.request.body)
         data = json.loads(self.request.body)
         userid = data['userToken']
+        self.userid = userid
         # TODO: Check that the userToken is a valid userToken.
         self.mirror_service = util.create_service(
             'mirror', 'v1',
@@ -90,7 +91,7 @@ class NotifyHandler(webapp2.RequestHandler):
                 break
             else:
                 logging.info("Dispatching %s to glassfit", user_action)
-                gnotify.NotifyHandler(self, user_action, data)
+                gnotify.NotifyHandler(self, user_action, data, self.userid)
 
 
 NOTIFY_ROUTES = [
