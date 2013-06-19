@@ -1,11 +1,10 @@
 import logging
-from google.appengine.api import memcache
 from collections import namedtuple
 
 from datetime import datetime
 from debug import timestamp_after
 
-from glassfit import proto
+import glassfit.tasks as gtasks
 
 
 # FIXME
@@ -57,9 +56,7 @@ class NotifyHandler(object):
         self.dispatch(self.event)
 
     def cancel_all_workouts(self):
-        userid = self.userid
-        proto.cancel_workouts(userid, lambda w_id:
-                self.mirror_service.timeline().delete(id=w_id).execute())
+        gtasks.cancel_cards(self.userid)
 
     def schedule_workout(self, body, after):
         body['notification'] = {
@@ -89,10 +86,3 @@ class NotifyHandler(object):
     def finish_workout(self):
         logging.info('NOTIFY - User finished workout')
 
-    def finished_exercise(self):
-        next_exercise = workout_flow(memcache.get(key=self.userid))
-        if next_exercise is None: # done workout
-            logging.info("TODO show workout screen")
-        else:
-            self.cue_workout(next_exercise)
-        
