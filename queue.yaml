@@ -1,0 +1,5 @@
+total_storage_limit: 120M
+queue:
+- name: workouts
+  mode: push
+  rate: 100/s
