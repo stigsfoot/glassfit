@@ -4,9 +4,7 @@ enough for a prototype but does work so well in real life b/c some users
 might experience their workouts to be randomly wiped by google's random
 memcache flushes"""
 
-from datetime import datetime
 import json
-
 import logging
 import webapp2
 from google.appengine.api import taskqueue
@@ -66,44 +64,6 @@ class CardWorker(webapp2.RequestHandler):
             self.mirror_service.timeline().insert(body=card_body).execute()
             logging.info('card(%s) inserted', taskid)
 
-class DummyProcessor(webapp2.RequestHandler):
-
-    def init_service(self, userid):
-        creds = StorageByKeyName(Credentials, userid, 'credentials').get()
-        self.mirror_service = util.create_service('mirror', 'v1', creds)
-
-    def post(self):
-        self.init_service(self.request.get('userid'))
-        logging.info("task(%s):\n%s\n", 
-                self.request.headers['X-AppEngine-TaskName'],
-                str(self.request.get('payload')))
-
-        logging.info("time reported by task %s", self.request.get('now'))
-
-        if self.mirror_service is None:
-            logging.info('NO MIRROR SERVICE')
-        else:
-            logging.info('MIRROR SERVICE WORKING')
-
-class DummyTask(webapp2.RequestHandler):
-    def get(self, payload):
-        userid,_ = util.load_session_credentials(self)
-        task = taskqueue.add(
-                #queue_name='workouts',
-                url='/dummyq',
-                params={
-                    'payload': payload,
-                    'now': str(datetime.now()),
-                    'userid': userid
-                }
-        )
-        logging.info("Secheduling a task(%s) to userid=%s payload=%s",
-                task.name, userid, payload)
-        self.response.write('Scheduled a task with payload={p}'
-                .format(p=payload))
-
 TASK_ROUTES = [
-    ('/dummyq', DummyProcessor),
-    ('/dummy/(.+)', DummyTask),
     ('/cardq', CardWorker)
 ]
