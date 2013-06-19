@@ -24,16 +24,6 @@ workouts = [
     Exercise(name='jumpingjacks', time=10)
 ]
 
-def workout_flow(current):
-    """Just for demoing purposes, we should have something more sophisticated
-    later"""
-    {
-        None: Exercise(name='squat', time=15),
-        'squat': Exercise(name='pushup', time=20),
-        'pushup': Exercise(name='jumpingjacks', time=10),
-        'jumpingjacks': None
-    }
-
 class NotifyHandler(object):
     def __init__(self, request_handler, event, payload, userid):
         logging.info("User %s", userid)
