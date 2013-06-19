@@ -37,13 +37,13 @@ class TaskHandler(object):
         logging.info("Sent a card to user %s. %d seconds", userid, countdown)
         return task.name
 
-    def cancel_cards(self, userid):
-        current_val = memcache.get(key=userid)
-        if current_val is None:
-            logging.warn('Nothing scheduled for user %s', current_val)
-            return
-        memcache_values = { card:1 for card in current_val.split('__') }
-        memcache.set_multi(memcache_values, time=60*60)
+def cancel_cards(userid):
+    current_val = memcache.get(key=userid)
+    if current_val is None:
+        logging.warn('Nothing scheduled for user %s', current_val)
+        return
+    memcache_values = { card:1 for card in current_val.split('__') }
+    memcache.set_multi(memcache_values, time=60*60)
 
 
 class CardWorker(webapp2.RequestHandler):
