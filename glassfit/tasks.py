@@ -26,6 +26,7 @@ class TaskHandler(object):
         logging.info('Tasks: %s for user:%s', str(taskids), userid)
 
     def send_card_task(self, userid, card, countdown):
+        memcache.delete(key=userid)
         task = taskqueue.add(
             url='/cardq',
             params={
