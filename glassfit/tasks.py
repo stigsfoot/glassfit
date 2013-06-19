@@ -31,9 +31,9 @@ class TaskHandler(object):
             url='/cardq',
             params={
                 'payload': json.dumps(card),
-                'userid': userid
-            }
-        )
+                'userid': userid,
+            },
+            countdown=countdown)
         logging.info("Sent a card to user %s. %d seconds", userid, countdown)
         return task.name
 
