@@ -7,6 +7,8 @@ from collections import namedtuple
 from glassfit.debug import timestamp_after
 from datetime import datetime
 
+import glassfit.tasks as gtasks
+
 Exercise = namedtuple('Exercise', ['name', 'time'])
 
 workouts = [
@@ -72,7 +74,7 @@ def cancel_workouts(userid, cancel):
         logging.warn('Cancel did not handle exception:')
         logging.warn(traceback.format_exc())
 
-class StartPrototype(webapp2.RequestHandler):
+class StartPrototype(webapp2.RequestHandler, gtasks.TaskHandler):
     @util.auth_required
     def get(self):
         cancel_workouts(self.userid, lambda w_id:
