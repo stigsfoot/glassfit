@@ -23,7 +23,7 @@ class TaskHandler(object):
         memcache.delete(key=userid)
         taskids = [self.send_card_task(userid, card, time) \
                 for card, time in cards ]
-        memcache.set(key=userid, values='__'.join(taskids))
+        memcache.set(key=userid, value='__'.join(taskids))
         logging.info('Tasks: %s for user:%s', str(taskids), userid)
 
     def send_card_task(self, userid, card, countdown):
