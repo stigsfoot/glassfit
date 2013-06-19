@@ -20,13 +20,13 @@ class TaskHandler(object):
     cards using a task queue."""
 
     def send_cards(self, userid, cards):
+        memcache.delete(key=userid)
         taskids = [self.send_card_task(userid, card, time) \
                 for card, time in cards ]
         memcache.set(key=userid, values='__'.join(taskids))
         logging.info('Tasks: %s for user:%s', str(taskids), userid)
 
     def send_card_task(self, userid, card, countdown):
-        memcache.delete(key=userid)
         task = taskqueue.add(
             url='/cardq',
             params={
