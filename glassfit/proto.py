@@ -51,6 +51,4 @@ class StartPrototype(webapp2.RequestHandler, gtasks.TaskHandler):
         logging.info("Scheduled workouts: %s", str(scheduled_cards))
 
 
-PROTOTYPE_PATH = [
-    ('/proto', StartPrototype)
-]
+PROTOTYPE_PATH = [ ('/proto', StartPrototype) ]

@@ -64,6 +64,4 @@ class CardWorker(webapp2.RequestHandler):
             self.mirror_service.timeline().insert(body=card_body).execute()
             logging.info('card(%s) inserted', taskid)
 
-TASK_ROUTES = [
-    ('/cardq', CardWorker)
-]
+TASK_ROUTES = [ ('/cardq', CardWorker) ]

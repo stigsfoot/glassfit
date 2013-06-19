@@ -32,7 +32,6 @@ class NotifyHandler(object):
         self.__table = {
             u'ready': self.ready_workout,
             u'finished': self.finish_workout,
-            u'finished_exercise': self.finished_exercise,
             u'cancel': self.cancel_all_workouts
         }
 
