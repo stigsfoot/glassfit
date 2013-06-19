@@ -34,7 +34,7 @@ class TaskHandler(object):
                 'userid': userid
             }
         )
-        logging.info("Sent a card to user %s", userid)
+        logging.info("Sent a card to user %s. %d seconds", userid, countdown)
         return task.name
 
     def cancel_cards(self, userid):
