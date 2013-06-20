@@ -4,13 +4,13 @@ enough for a prototype but does work so well in real life b/c some users
 might experience their workouts to be randomly wiped by google's random
 memcache flushes"""
 
-import json
 import logging
 import webapp2
 from google.appengine.api import taskqueue
 from oauth2client.appengine import StorageByKeyName
 from google.appengine.api import memcache
 from model import Credentials
+from glassfit.workout import WorkoutTemplate, WorkoutSet
 import util
 
 class TaskHandler(object):
@@ -19,7 +19,7 @@ class TaskHandler(object):
 
     def send_cards(self, userid, cards):
         memcache.delete(key=userid)
-        taskids = [self.send_card_task(userid, card, time) \
+        taskids = [ self.send_card_task(userid, card, time) \
                 for card, time in cards ]
         memcache.set(key=userid, value='__'.join(taskids))
         logging.info('Tasks: %s for user:%s', str(taskids), userid)
@@ -28,7 +28,7 @@ class TaskHandler(object):
         task = taskqueue.add(
             url='/cardq',
             params={
-                'payload': json.dumps(card),
+                'payload': card.to_json(),
                 'userid': userid,
             },
             countdown=countdown)
@@ -42,7 +42,6 @@ def cancel_cards(userid):
         return
     memcache_values = { card:1 for card in current_val.split('__') }
     memcache.set_multi(memcache_values, time=60*60)
-
 
 class CardWorker(webapp2.RequestHandler):
     """A cardworker consumes scheduled cards from the push queue and
@@ -60,7 +59,8 @@ class CardWorker(webapp2.RequestHandler):
             memcache.delete(key=taskid)
         else:
             self.init_service(userid)
-            card_body = json.loads(self.request.get('payload'))
+            workout = WorkoutSet.of_json(self.request.get('payload'))
+            card_body = WorkoutTemplate(workout).render_template()
             self.mirror_service.timeline().insert(body=card_body).execute()
             logging.info('card(%s) inserted', taskid)
 

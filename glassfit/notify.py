@@ -2,7 +2,6 @@ import logging
 from collections import namedtuple
 import glassfit.tasks as gtasks
 
-
 # FIXME
 # for now we are misusing memcache to store user's workout sessions.
 # this isn't a very good idea in general because memcache values can

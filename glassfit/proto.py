@@ -1,12 +1,9 @@
 import logging
 import util
 import webapp2
-from collections import namedtuple
 
 import glassfit.tasks as gtasks
 import glassfit.workout as gworkout
-
-Exercise = namedtuple('Exercise', ['name', 'time'])
 
 def schedule_workouts(workouts):
     skip = 0
