@@ -1,9 +1,5 @@
 import logging
 from collections import namedtuple
-
-from datetime import datetime
-from debug import timestamp_after
-
 import glassfit.tasks as gtasks
 
 
@@ -19,7 +15,6 @@ def body(workout):
     return {'text': 'Working out: doing {w}'.format(w=workout)}
 
 workouts = [
-    Exercise(name='-- warmup --', time=30),
     Exercise(name='squat', time=15),
     Exercise(name='pushup', time=20),
     Exercise(name='jumpingjacks', time=10)
@@ -48,13 +43,6 @@ class NotifyHandler(object):
     def cancel_all_workouts(self):
         gtasks.cancel_cards(self.userid)
 
-    def schedule_workout(self, body, after):
-        body['notification'] = {
-            'deliveryTime': timestamp_after(datetime.now(), after),
-            'level': 'DEFAULT'
-        }
-        self.mirror_service.timeline().insert(body=body).execute()
-
     def dispatch(self, event):
         self.__table.get(event, self.unknown)()
 
@@ -63,12 +51,7 @@ class NotifyHandler(object):
                 .format(evt=self.event, payload=self.payload))
 
     def ready_workout(self):
-        current = 0
-        for w in workouts:
-            self.schedule_workout(body(w.name), current)
-            current += w.time
-        self.mirror_service.timeline().insert(
-                body={'text': 'finished'}).execute()
+        logging.info('Scheduling workouts here')
 
     def finish_workout(self):
         logging.info('NOTIFY - User completed workout')
