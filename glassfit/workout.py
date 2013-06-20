@@ -1,64 +1,58 @@
-import logging
-import webapp2
 from os import path
-import util
-import time
-from debug import timestamp_after
-from datetime import datetime
+from collections import namedtuple
+import jinja2
 
-# need this module to format datetime's per google's wishes
-
-# A workout card is intended to
-# 1. display a workout animated gif
-# 2. display instructions
-# 3. display a timer
-# 4. schedule another card
-
-# Right now we just hard code stuff
 workouts_base = path.join(path.dirname(__file__), '../', 'templates/workouts/')
+image_base = path.join('static', 'images')
 
+jinja = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(path.dirname(workouts_base)))
+
+class Exercise(object):
+    def __init__(self, name): self.name = name
+    def fname(self): return self.name.replace(' ','_').lower()
+    def animation_path(self):
+        return path.join(image_base, self.name + '.gif')
+
+def timer_path(duration):
+    valid_durations = set([5, 10, 15, 20 ,25])
+    if duration not in valid_durations:
+        raise ValueError('Invalid duration: {d}'.format(d=duration))
+    fname = "%d.gif" % duration 
+    return path.join(image_base, fname)
+
+valid_exercises = set()
+
+warmup  = Exercise(name='Warmup')
+squats  = Exercise(name='Squats')
+pushups = Exercise(name='Pushups')
+situps  = Exercise(name='Situps')
+
+WorkoutSet = namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])
+
+class WorkoutTemplate(object):
+    def __init__(self, workout_set):
+        self.workout_set = workout_set
+    def render_template(self):
+        template_path = self.workout_set.exercise.fname() + '.json'
+        template = jinja.get_template(template_path)
+        return template.render({
+            'workout_name': self.workout_set.exercise.name,
+            'duration': self.workout_set.time,
+            'num_reps': self.workout_set.reps,
+            'time_path': timer_path(self.workout_set.time),
+            'image_path': self.workout_set.exercise.animation_path()
+        })
+
+workout = [ 
+    WorkoutSet(exercise=warmup, reps=15, time=20),
+    WorkoutSet(exercise=squats, reps=10, time=15),
+    WorkoutSet(exercise=situps, reps=20, time=5),
+    WorkoutSet(exercise=pushups, reps=11, time=10),
+]
 
 def workout_template(workout):
     return path.join(workouts_base, workout)
 
-
 def body(workout):
     return {'text': 'Working out: doing {w}'.format(w=workout)}
-
-
-class Card(webapp2.RequestHandler):
-    @util.auth_required
-    def get(self, workout_name, duration):
-        """Render a workout card from a workout_name and a duration"""
-        logging.info("Attempting to workout: {w} for {d}" \
-                .format(w=workout_name, d=duration))
-        template_path = workout_template(workout_name)
-        logging.info("Rendering: {path}".format(path=template_path))
-        self.mirror_service.timeline().insert(body=body(workout_name)).execute()
-
-        timestamp_after_duration = timestamp_after(datetime.now(),
-                int(duration))
-
-        logging.info("Notification will occur in {time}" \
-                .format(time=timestamp_after_duration))
-
-        card = self.mirror_service.timeline().insert(body={
-            'text': 'Finished exercise. Should have waited {s} seconds' \
-                    .format(s=duration),
-            'notification': {
-                    'deliveryTime': timestamp_after_duration,
-                    'level': 'DEFAULT'
-                },
-            }
-        ).execute()
-
-        logging.info("Sent a workout card %s", card)
-        logging.info('Sleeping for 2.0 seconds and then cancelling')
-        time.sleep(2.0)
-        self.mirror_service.timeline().delete(id=card['id']).execute()
-        logging.info('Deleted card')
-
-
-WORKOUT_PATHS = [
-    ('/workout/(.+)/(\d+)', Card)
-]
