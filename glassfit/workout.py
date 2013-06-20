@@ -11,8 +11,7 @@ jinja = jinja2.Environment(
 class Exercise(object):
     def __init__(self, name): self.name = name
     def fname(self): return self.name.replace(' ','_').lower()
-    def animation_path(self):
-        return path.join(image_base, self.name + '.gif')
+    def animation_path(self): return path.join(image_base, self.name + '.gif')
 
 def timer_path(duration):
     valid_durations = set([5, 10, 15, 20 ,25])
@@ -50,9 +49,3 @@ workout = [
     WorkoutSet(exercise=situps, reps=20, time=5),
     WorkoutSet(exercise=pushups, reps=11, time=10),
 ]
-
-def workout_template(workout):
-    return path.join(workouts_base, workout)
-
-def body(workout):
-    return {'text': 'Working out: doing {w}'.format(w=workout)}
