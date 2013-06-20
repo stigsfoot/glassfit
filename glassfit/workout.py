@@ -11,10 +11,10 @@ image_maps = {
     10        : imgur('asdfg.gif'),
     15        : imgur('zxcvb.gif'),
     20        : imgur('asdf.gif'),
-    'warmps'  : imgur('blah'),
-    'squats'  : imgur('blah'),
-    'pushups' : imgur('blah'),
-    'situps'  : imgur('blah'),
+    'Warmup'  : imgur('blah'),
+    'Squats'  : imgur('blah'),
+    'Pushups' : imgur('blah'),
+    'Situps'  : imgur('blah'),
 }
 
 jinja = jinja2.Environment(
