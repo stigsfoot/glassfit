@@ -1,4 +1,5 @@
 from os import path
+import json
 from collections import namedtuple
 import jinja2
 import random
@@ -34,15 +35,26 @@ squats  = Exercise(name='Squats')
 pushups = Exercise(name='Pushups')
 situps  = Exercise(name='Situps')
 
-WorkoutSet = namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])
+_WorkoutSet = namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])
+class WorkoutSet(_WorkoutSet):
+    @classmethod
+    def of_json(cls, js):
+        d = json.loads(js)
+        return cls(reps=d['reps'],time=d['time'],
+                exercise=Exercise(d['exercise']))
+    def to_json(self):
+        return json.dumps({
+            'reps': self.reps,
+            'time': self.time,
+            'exercise': self.exercise.name
+        })
 
 class WorkoutTemplate(object):
     def __init__(self, workout_set):
         self.workout_set = workout_set
 
     def render_template(self):
-        template_path = self.workout_set.exercise.fname() + '.json'
-        template = jinja.get_template(template_path)
+        template = jinja.get_template('workout.json')
         return template.render({
             'workout_name': self.workout_set.exercise.name,
             'duration': self.workout_set.time,
@@ -52,6 +64,7 @@ class WorkoutTemplate(object):
             'background_path': random.choice(backgrounds)
         })
 
+# The sample workout we use for now
 workout = [ 
     WorkoutSet(exercise=warmup, reps=15, time=20),
     WorkoutSet(exercise=squats, reps=10, time=15),
