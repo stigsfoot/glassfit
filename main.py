@@ -29,7 +29,6 @@ from main_handler import MAIN_ROUTES
 from notify.handler import NOTIFY_ROUTES
 from oauth.handler import OAUTH_ROUTES
 from signout.handler import SIGNOUT_ROUTES
-from glassfit.workout import WORKOUT_PATHS
 from glassfit.debug import DEBUG_PATHS
 from glassfit.main import START_WORKOUT_PATH
 from glassfit.proto import PROTOTYPE_PATH
@@ -37,8 +36,8 @@ from glassfit.tasks import TASK_ROUTES
 
 ROUTES = (
     ATTACHMENT_PROXY_ROUTES + MAIN_ROUTES + NOTIFY_ROUTES + OAUTH_ROUTES +
-    SIGNOUT_ROUTES + WORKOUT_PATHS + DEBUG_PATHS + START_WORKOUT_PATH
-    + PROTOTYPE_PATH + TASK_ROUTES
+    SIGNOUT_ROUTES + DEBUG_PATHS + START_WORKOUT_PATH + PROTOTYPE_PATH +
+    TASK_ROUTES
 )
 
 app = webapp2.WSGIApplication(ROUTES)
