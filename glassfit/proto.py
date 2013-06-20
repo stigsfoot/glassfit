@@ -8,12 +8,6 @@ import glassfit.workout as gworkout
 
 Exercise = namedtuple('Exercise', ['name', 'time'])
 
-workouts = [
-    Exercise(name='squat', time=15),
-    Exercise(name='pushup', time=20),
-    Exercise(name='jumpingjacks', time=10)
-]
-
 def schedule_workouts(workouts):
     skip = 0
     scheduled = []
