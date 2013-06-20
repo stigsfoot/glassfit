@@ -39,6 +39,7 @@ WorkoutSet = namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])
 class WorkoutTemplate(object):
     def __init__(self, workout_set):
         self.workout_set = workout_set
+
     def render_template(self):
         template_path = self.workout_set.exercise.fname() + '.json'
         template = jinja.get_template(template_path)
@@ -48,7 +49,7 @@ class WorkoutTemplate(object):
             'num_reps': self.workout_set.reps,
             'time_path': timer_path(self.workout_set.time),
             'image_path': self.workout_set.exercise.animation_path(),
-            'backgroun_path': random.choice(backgrounds)
+            'background_path': random.choice(backgrounds)
         })
 
 workout = [ 
