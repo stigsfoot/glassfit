@@ -3,24 +3,28 @@ from collections import namedtuple
 import jinja2
 
 workouts_base = path.join(path.dirname(__file__), '../', 'templates/workouts/')
-image_base = path.join('static', 'images')
+
+def imgur(k): return 'http://imgur.com/%s' % k
+
+image_maps = {
+    5         : imgur('12345.gif'),
+    10        : imgur('asdfg.gif'),
+    15        : imgur('zxcvb.gif'),
+    20        : imgur('asdf.gif'),
+    'warmps'  : imgur('blah'),
+    'squats'  : imgur('blah'),
+    'pushups' : imgur('blah'),
+    'situps'  : imgur('blah'),
+}
 
 jinja = jinja2.Environment(
         loader=jinja2.FileSystemLoader(path.dirname(workouts_base)))
 
 class Exercise(object):
     def __init__(self, name): self.name = name
-    def fname(self): return self.name.replace(' ','_').lower()
-    def animation_path(self): return path.join(image_base, self.name + '.gif')
+    def animation_path(self): return image_maps[self.name]
 
-def timer_path(duration):
-    valid_durations = set([5, 10, 15, 20 ,25])
-    if duration not in valid_durations:
-        raise ValueError('Invalid duration: {d}'.format(d=duration))
-    fname = "%d.gif" % duration 
-    return path.join(image_base, fname)
-
-valid_exercises = set()
+def timer_path(duration): return image_maps[duration]
 
 warmup  = Exercise(name='Warmup')
 squats  = Exercise(name='Squats')
