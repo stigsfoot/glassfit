@@ -1,6 +1,7 @@
 from os import path
 from collections import namedtuple
 import jinja2
+import random
 
 workouts_base = path.join(path.dirname(__file__), '../', 'templates/workouts/')
 
@@ -16,6 +17,8 @@ image_maps = {
     'Pushups' : imgur('blah'),
     'Situps'  : imgur('blah'),
 }
+
+backgrounds = [imgur('bg1'), imgur('bg2'), imgur('bg3')]
 
 jinja = jinja2.Environment(
         loader=jinja2.FileSystemLoader(path.dirname(workouts_base)))
@@ -44,7 +47,8 @@ class WorkoutTemplate(object):
             'duration': self.workout_set.time,
             'num_reps': self.workout_set.reps,
             'time_path': timer_path(self.workout_set.time),
-            'image_path': self.workout_set.exercise.animation_path()
+            'image_path': self.workout_set.exercise.animation_path(),
+            'backgroun_path': random.choice(backgrounds)
         })
 
 workout = [ 
