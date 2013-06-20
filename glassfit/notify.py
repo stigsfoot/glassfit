@@ -19,6 +19,7 @@ def body(workout):
     return {'text': 'Working out: doing {w}'.format(w=workout)}
 
 workouts = [
+    Exercise(name='-- warmup --', time=30),
     Exercise(name='squat', time=15),
     Exercise(name='pushup', time=20),
     Exercise(name='jumpingjacks', time=10)
@@ -54,10 +55,6 @@ class NotifyHandler(object):
         }
         self.mirror_service.timeline().insert(body=body).execute()
 
-    def cue_workout(self, exercise):
-        logging.info("Cueing exercise: {name} for {s} seconds:" \
-                .format(name=exercise.name, s=exercise.time))
-
     def dispatch(self, event):
         self.__table.get(event, self.unknown)()
 
@@ -70,8 +67,9 @@ class NotifyHandler(object):
         for w in workouts:
             self.schedule_workout(body(w.name), current)
             current += w.time
-        self.mirror_service.timeline().insert(body={'text': 'finished'}).execute()
+        self.mirror_service.timeline().insert(
+                body={'text': 'finished'}).execute()
 
     def finish_workout(self):
-        logging.info('NOTIFY - User finished workout')
+        logging.info('NOTIFY - User completed workout')
 
