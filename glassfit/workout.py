@@ -47,21 +47,42 @@ class WorkoutSet(namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])):
             'time': self.time,
             'exercise': self.exercise.name
         })
+    def template_vars(self):
+        return {
+                'workout_name': self.exercise.name,
+                'duration': self.time,
+                'num_reps': self.reps,
+                'time_path': timer_path(self.time),
+                'image_path': self.exercise.animation_path(),
+                'background_path': random.choice(backgrounds)
+                }
+    @property
+    def template_name(self): return 'workout.json'
+
+class SimpleCard(namedtuple('SimpleCard', ['time', 'template_name'])):
+    @classmethod
+    def of_json(cls, js):
+        d = json.loads(js)
+        return cls(d['time'], d['template_name'])
+    def to_json(self):
+        return json.dumps({
+            'template_name': self.template_name,
+            'time': self.time
+        })
+    def template_vars(self): return {}
+
+# TODO hacky. will fix later
+def card_factory(js):
+    js = json.loads(js)
+    if 'exercise' in js: return WorkoutSet
+    else: return SimpleCard
 
 class WorkoutTemplate(object):
-    def __init__(self, workout_set):
-        self.workout_set = workout_set
+    def __init__(self, card): self.card = card
 
     def render_template(self):
-        template = jinja.get_template('workout.json')
-        return json.loads(template.render({
-            'workout_name': self.workout_set.exercise.name,
-            'duration': self.workout_set.time,
-            'num_reps': self.workout_set.reps,
-            'time_path': timer_path(self.workout_set.time),
-            'image_path': self.workout_set.exercise.animation_path(),
-            'background_path': random.choice(backgrounds)
-        }))
+        template = jinja.get_template(self.card.template_name)
+        return json.loads(template.render(self.card.template_vars()))
 
 # The sample workout we use for now
 workout = [ 
@@ -69,4 +90,5 @@ workout = [
     WorkoutSet(exercise=squats, reps=10, time=15),
     WorkoutSet(exercise=situps, reps=20, time=5),
     WorkoutSet(exercise=pushups, reps=11, time=10),
+    SimpleCard(template_name='finish.json', time=0)
 ]

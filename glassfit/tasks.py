@@ -10,7 +10,7 @@ from google.appengine.api import taskqueue
 from oauth2client.appengine import StorageByKeyName
 from google.appengine.api import memcache
 from model import Credentials
-from glassfit.workout import WorkoutTemplate, WorkoutSet
+from glassfit.workout import WorkoutTemplate, card_factory
 import util
 
 class TaskHandler(object):
@@ -59,7 +59,8 @@ class CardWorker(webapp2.RequestHandler):
             memcache.delete(key=taskid)
         else:
             self.init_service(userid)
-            workout = WorkoutSet.of_json(self.request.get('payload'))
+            payload = self.request.get('payload')
+            workout = card_factory(payload).of_json(payload)
             card_body = WorkoutTemplate(workout).render_template()
             self.mirror_service.timeline().insert(body=card_body).execute()
             logging.info('card(%s) inserted', taskid)
