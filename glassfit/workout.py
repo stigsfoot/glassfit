@@ -35,8 +35,7 @@ squats  = Exercise(name='Squats')
 pushups = Exercise(name='Pushups')
 situps  = Exercise(name='Situps')
 
-_WorkoutSet = namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])
-class WorkoutSet(_WorkoutSet):
+class WorkoutSet(namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])):
     @classmethod
     def of_json(cls, js):
         d = json.loads(js)
