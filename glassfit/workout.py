@@ -55,14 +55,14 @@ class WorkoutTemplate(object):
 
     def render_template(self):
         template = jinja.get_template('workout.json')
-        return template.render({
+        return json.loads(template.render({
             'workout_name': self.workout_set.exercise.name,
             'duration': self.workout_set.time,
             'num_reps': self.workout_set.reps,
             'time_path': timer_path(self.workout_set.time),
             'image_path': self.workout_set.exercise.animation_path(),
             'background_path': random.choice(backgrounds)
-        })
+        }))
 
 # The sample workout we use for now
 workout = [ 

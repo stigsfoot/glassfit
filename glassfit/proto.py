@@ -9,7 +9,7 @@ def schedule_workouts(workouts):
     skip = 0
     scheduled = []
     for workout in workouts:
-        scheduled.append(workout, skip)
+        scheduled.append((workout, skip))
         skip += workout.time
     return scheduled
 
