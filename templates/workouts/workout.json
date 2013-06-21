@@ -1,0 +1,15 @@
+{
+   "menuItems" : [
+      {
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://imgur.com/cancel_button.gif",
+               "displayName" : "Cancel"
+            }
+         ],
+         "id" : "cancel"
+      }
+   ],
+   "text" : "Working out - doing {{ workout_name }} for {{ duration }} seconds reps: {{ num_reps }}"
+}
