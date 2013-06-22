@@ -1,5 +1,4 @@
 import logging
-from pprint import pprint
 import json
 import webapp2
 import util
@@ -19,14 +18,6 @@ def get_proxy_url(path):
     logging.info("Proxying to {u}".format(u=proxy_url))
     return proxy_url
 
-
-def show_current_timeline_card(mirror_service, last_x=1):
-    timeline = mirror_service.timeline().list(maxResults=last_x) \
-            .execute()['items']
-    pprint(timeline)
-    logging.info("Look the current timeline item over here")
-
-
 class LastCards(webapp2.RequestHandler):
     """for debug purposes, shows the last X cards in the timeline"""
 
@@ -44,7 +35,6 @@ class LastSubscriptions(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write(json.dumps(self.mirror_service \
                 .subscriptions().list().execute()))
-
 
 DEBUG_PATHS = [
     ('/d/cards', LastCards),
