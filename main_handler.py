@@ -234,6 +234,6 @@ class MainHandler(webapp2.RequestHandler):
         return 'Contact has been deleted.'
 
 
-MAIN_ROUTES = [
-    ('/', MainHandler)
-]
+MAIN_ROUTES = []
+    #('/', MainHandler)
+#]

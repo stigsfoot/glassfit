@@ -1,20 +1,14 @@
 import logging
 import webapp2
 import util
+import json
 
+from glassfit.workout import jinja
 import glassfit.notify
 
 def start_page_card():
-    """Initial card"""
-    # TODO probably should some sort of a menu for the user here?
-    # or maybe just immediately start a workout?
-    timeline_item_body = {
-        'text': 'Welcome to Glassfit. -- Menu here --',
-        'notification': {
-            'level': 'DEFAULT'
-        }
-    }
-    return timeline_item_body
+    template = jinja.get_template('welcome.json')
+    return json.loads(template.render({}))
 
 class StartSession(webapp2.RequestHandler):
     """Start a workout session for the user"""
@@ -39,7 +33,7 @@ class StartSession(webapp2.RequestHandler):
 
         glassfit.notify.NotifyHandler(self, {
             'payload': 'ready'
-        },None)
+        }, None)
 
 START_WORKOUT_PATH = [
     ('/start', StartSession)
