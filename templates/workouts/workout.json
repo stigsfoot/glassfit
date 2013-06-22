@@ -11,5 +11,5 @@
          "id" : "cancel"
       }
    ],
-   "html": "<article>\n<img src=\"{{ background_path }}\">\n  <section>\n\n    <p class=\"text-normal align-center\"> {{ workout_name }} </p>\n <div class=\"align-center\">\n\n  <img src=\"{{ image_path }}\">\n</div>\n  </section>\n  \n  <section>\n   <div class=\"align-left\"> <img src=\"{{ time_path }}\">\n   </div>\n  </section>\n\n  <footer class=\"yellow\">{{ duration }}</footer>\n\n</article>",
-  }
+   "html": "<article>\n<img src=\"{{ background_path }}\">\n  <section>\n\n    <p class=\"text-normal align-center\"> {{ workout_name }} </p>\n <div class=\"align-center\">\n\n  <img src=\"{{ image_path }}\">\n</div>\n  </section>\n  \n  <section>\n   <div class=\"align-left\"> <img src=\"{{ time_path }}\">\n   </div>\n  </section>\n\n  <footer class=\"yellow\">{{ duration }}</footer>\n\n</article>"
+}
