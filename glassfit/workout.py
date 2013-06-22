@@ -6,20 +6,21 @@ import random
 
 workouts_base = path.join(path.dirname(__file__), '../', 'templates/workouts/')
 
-def imgur(k): return 'http://imgur.com/%s' % k
+def imgur(k): return 'http://i.imgur.com/%s' % k
 
 image_maps = {
     5         : imgur('12345.gif'),
     10        : imgur('asdfg.gif'),
     15        : imgur('zxcvb.gif'),
     20        : imgur('asdf.gif'),
+    30        : imgur('9zqBGzy.gif');
     'Warmup'  : imgur('blah'),
     'Squats'  : imgur('blah'),
-    'Pushups' : imgur('blah'),
+    'Pushups' : imgur('I8oiUok.gif'),
     'Situps'  : imgur('blah'),
 }
 
-backgrounds = [imgur('bg1'), imgur('bg2'), imgur('bg3')]
+backgrounds = [imgur('bg1')]
 
 jinja = jinja2.Environment(
         loader=jinja2.FileSystemLoader(path.dirname(workouts_base)))
