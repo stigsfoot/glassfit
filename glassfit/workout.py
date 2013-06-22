@@ -13,7 +13,7 @@ image_maps = {
     10        : imgur('asdfg.gif'),
     15        : imgur('zxcvb.gif'),
     20        : imgur('asdf.gif'),
-    30        : imgur('9zqBGzy.gif');
+    30        : imgur('9zqBGzy.gif'),
     'Warmup'  : imgur('blah'),
     'Squats'  : imgur('blah'),
     'Pushups' : imgur('I8oiUok.gif'),
