@@ -13,11 +13,19 @@ def schedule_workouts(workouts):
         skip += workout.time
     return scheduled
 
-class StartPrototype(webapp2.RequestHandler, gtasks.TaskHandler):
+class StartWorkouts(webapp2.RequestHandler, gtasks.TaskHandler):
     @util.auth_required
     def get(self):
         scheduled_cards = schedule_workouts(gworkout.workout)
         self.send_cards(self.userid, scheduled_cards)
         logging.info("Scheduled workouts: %s", str(scheduled_cards))
 
-PROTOTYPE_PATH = [ ('/proto', StartPrototype) ]
+class StartPrototype(webapp2.RequestHandler):
+    @util.auth_required
+    def get(self):
+        pass
+
+PROTOTYPE_PATH = [
+    ('/start', StartPrototype)
+    ('/proto', StartWorkouts),
+]

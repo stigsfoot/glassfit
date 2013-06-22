@@ -63,6 +63,7 @@ class CardWorker(webapp2.RequestHandler):
             workout = card_factory(payload).of_json(payload)
             card_body = WorkoutTemplate(workout).render_template()
             self.mirror_service.timeline().insert(body=card_body).execute()
-            logging.info('card(%s) inserted', taskid)
+            logging.info('card(%s) inserted: "%s"', taskid,
+                    card_body['text'] if 'text' in card_body else '<task>')
 
 TASK_ROUTES = [ ('/cardq', CardWorker) ]
