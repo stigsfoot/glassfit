@@ -26,7 +26,8 @@
             "         <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
             "      </section>"
             "</article>",
-   "htmlPages":[
+   "htmlPages":
+   [
       "<article>"
       "  <section>"
       "    <p class=\"text-auto-size\">Thank you for checking out GlassFit. Its extremely important to stretch and follow the correct guidelines for performing any exercise. Please send feedback.    </p>"
@@ -37,12 +38,10 @@
 
       "<article class=\"photo\">"
       "   <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
-      "   <div class=\"photo-overlay\"/>'
-'  <section>'
-'    <p class=\"text-auto-size\">Your feedback is valued. Lets begin</p>'
-'  </section>'
-'</article>'       
-
-
+      "   <div class=\"photo-overlay\"/>"
+      "      <section>"
+      "         <p class=\"text-auto-size\">Your feedback is valued. Lets begin</p>"
+      "      </section>"
+      "</article>"
    ]
 }

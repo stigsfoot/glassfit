@@ -4,12 +4,12 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://imgur.com/cancel_button.gif",
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
                "displayName" : "Cancel"
             }
          ],
          "id" : "cancel"
       }
    ],
-   "text" : "Working out - doing {{ workout_name }} for {{ duration }} seconds reps: {{ num_reps }}"
-}
+   "html": "<article>\n<img src=\"{{ background_path }}\">\n  <section>\n\n    <p class=\"text-normal align-center\"> {{ workout_name }} </p>\n <div class=\"align-center\">\n\n  <img src=\"{{ image_path }}\">\n</div>\n  </section>\n  \n  <section>\n   <div class=\"align-left\"> <img src=\"{{ time_path }}\">\n   </div>\n  </section>\n\n  <footer class=\"yellow\">{{ duration }}</footer>\n\n</article>",
+  }
