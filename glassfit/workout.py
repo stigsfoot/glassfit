@@ -98,6 +98,7 @@ TYPES = {
     'Exercise': Exercise,
     'SimpleCard': SimpleCard,
     'WorkoutSet': WorkoutSet,
+    'RestCard': RestCard,
 }
 
 class CustomTypeEncoder(json.JSONEncoder):
