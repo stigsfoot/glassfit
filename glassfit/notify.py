@@ -1,5 +1,4 @@
 import logging
-from collections import namedtuple
 import glassfit.tasks as gtasks
 
 # FIXME
@@ -7,14 +6,6 @@ import glassfit.tasks as gtasks
 # this isn't a very good idea in general because memcache values can
 # be flushed at any time. This will need to be changed to use the datastore
 # later on.
-
-Exercise = namedtuple('Exercise', ['name', 'time'])
-
-workouts = [
-    Exercise(name='squat', time=15),
-    Exercise(name='pushup', time=20),
-    Exercise(name='jumpingjacks', time=10)
-]
 
 class NotifyHandler(object):
     def __init__(self, request_handler, event, payload, userid):
