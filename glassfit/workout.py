@@ -9,15 +9,15 @@ workouts_base = path.join(path.dirname(__file__), '../', 'templates/workouts/')
 def imgur(k): return 'http://i.imgur.com/%s' % k
 
 image_maps = {
-    5         : imgur('12345.gif'),
-    10        : imgur('asdfg.gif'),
-    15        : imgur('zxcvb.gif'),
-    20        : imgur('asdf.gif'),
+    5         : imgur('HyYB3K6.gif'),
+    10        : imgur('e6UfFof.gif'),
+    15        : imgur('lYSIymH.gif'),
+    20        : imgur('fQ65krp.gif'),
     30        : imgur('9zqBGzy.gif'),
     'Warmup'  : imgur('blah'),
-    'Squats'  : imgur('blah'),
+    'Squats'  : imgur('2JyIEk7.gif'),
     'Pushups' : imgur('I8oiUok.gif'),
-    'Situps'  : imgur('blah'),
+    'Situps'  : imgur('GmkXqa1.gif'),
 }
 
 backgrounds = [imgur('bg1')]
