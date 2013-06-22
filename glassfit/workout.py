@@ -1,6 +1,5 @@
 from os import path
 import json
-from collections import namedtuple
 import logging
 import jinja2
 import random
@@ -36,7 +35,12 @@ squats  = Exercise(name='Squats')
 pushups = Exercise(name='Pushups')
 situps  = Exercise(name='Situps')
 
-class WorkoutSet(namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])):
+class WorkoutSet(object):
+    def __init__(self, reps, time, exercise):
+        self.reps = reps
+        self.time = time
+        self.exercise = exercise
+
     @classmethod
     def of_json(cls, js):
         d = json.loads(js)
@@ -60,7 +64,11 @@ class WorkoutSet(namedtuple('WorkoutSet', ['reps', 'time', 'exercise'])):
     @property
     def template_name(self): return 'workout.json'
 
-class SimpleCard(namedtuple('SimpleCard', ['time', 'template_name'])):
+class SimpleCard(object):
+    def __init__(self, time, template_name):
+        self.time = time
+        self.template_name = template_name
+
     @classmethod
     def of_json(cls, js):
         d = json.loads(js)
