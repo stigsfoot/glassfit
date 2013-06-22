@@ -41,17 +41,6 @@ class WorkoutSet(object):
         self.time = time
         self.exercise = exercise
 
-    @classmethod
-    def of_json(cls, js):
-        d = json.loads(js)
-        return cls(reps=d['reps'],time=d['time'],
-                exercise=Exercise(d['exercise']))
-    def to_json(self):
-        return json.dumps({
-            'reps': self.reps,
-            'time': self.time,
-            'exercise': self.exercise.name
-        })
     def template_vars(self):
         return {
                 'workout_name': self.exercise.name,
@@ -69,15 +58,6 @@ class SimpleCard(object):
         self.time = time
         self.template_name = template_name
 
-    @classmethod
-    def of_json(cls, js):
-        d = json.loads(js)
-        return cls(d['time'], d['template_name'])
-    def to_json(self):
-        return json.dumps({
-            'template_name': self.template_name,
-            'time': self.time
-        })
     def template_vars(self): return {}
 
 class WorkoutTemplate(object):
