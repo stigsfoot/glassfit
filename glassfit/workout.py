@@ -80,13 +80,6 @@ class SimpleCard(object):
         })
     def template_vars(self): return {}
 
-
-# TODO hacky. will fix later
-def card_factory(js):
-    js = json.loads(js)
-    if 'exercise' in js: return WorkoutSet
-    else: return SimpleCard
-
 class WorkoutTemplate(object):
     def __init__(self, card): self.card = card
 
@@ -119,12 +112,15 @@ class CustomTypeEncoder(json.JSONEncoder):
 
 
 class CustomTypeDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(self, object_hook=self.default, **kwargs)
+
     def default(self, dct):
         if len(dct) == 1:
             type_name, value = dct.items()[0]
             type_name = type_name.strip('_')
             if type_name in TYPES:
-                return TYPES[type_name].from_dict(value)
+                return TYPES[type_name](**value)
         return dct
 
 # The sample workout we use for now
