@@ -87,6 +87,13 @@ class WorkoutTemplate(object):
         template = jinja.get_template(self.card.template_name)
         return json.loads(template.render(self.card.template_vars()))
 
+class RestCard(object):
+    def __init__(self, time, template_name, message):
+        self.time = time
+        self.template_name = template_name
+        self.message = message
+    def template_vars(self): return { 'message' : self.message }
+
 TYPES = {
     'Exercise': Exercise,
     'SimpleCard': SimpleCard,
@@ -126,8 +133,11 @@ class CustomTypeDecoder(json.JSONDecoder):
 # The sample workout we use for now
 workout = [ 
     WorkoutSet(exercise=warmup, reps=15, time=20),
+    RestCard(time=5, template_name='rest.json', message='Squats next'),
     WorkoutSet(exercise=squats, reps=10, time=15),
+    RestCard(time=5, template_name='rest.json', message='Situps next'),
     WorkoutSet(exercise=situps, reps=20, time=5),
+    RestCard(time=5, template_name='rest.json', message='Pushups next'),
     WorkoutSet(exercise=pushups, reps=11, time=10),
     SimpleCard(template_name='finish.json', time=0)
 ]
