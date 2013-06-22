@@ -4,12 +4,45 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://imgur/lets.go",
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
                "displayName" : "Ready!"
             }
          ],
          "id" : "ready"
+      },
+      {
+         "action":"TOGGLE_PINNED"
+      },
+      {
+         "action": "DELETE"
+      },
+      {
+         "action": "READ_ALOUD"
       }
    ],
-   "text" : "-- insert welcome page here --"
+   "html" : "<article class=\"photo\">"
+            "   <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
+            "      <section>"
+            "         <p class=\"text-auto-size black\">Welcome to GlassFit. Tap to get started.</p>"
+            "      </section>"
+            "</article>",
+   "htmlPages":[
+      "<article>"
+      "  <section>"
+      "    <p class=\"text-auto-size\">Thank you for checking out GlassFit. Its extremely important to stretch and follow the correct guidelines for performing any exercise. Please send feedback.    </p>"
+      "  </section>"
+      "</article>",
+
+      "<article>\n  <section>\n    <table class=\"text-small\">\n      <tbody>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Warmup\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n        </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Squat\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Sit-up\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Push-up\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </section>\n  <footer>\n    <img src=\"http://i.imgur.com/8mNeU1z.png\" class=\"left\">\n    <p>Upcoming workout list</p>\n  </footer>\n</article>\n",
+
+      "<article class=\"photo\">"
+      "   <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">"
+      "   <div class=\"photo-overlay\"/>'
+'  <section>'
+'    <p class=\"text-auto-size\">Your feedback is valued. Lets begin</p>'
+'  </section>'
+'</article>'       
+
+
+   ]
 }
