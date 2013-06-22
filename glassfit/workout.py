@@ -1,6 +1,7 @@
 from os import path
 import json
 from collections import namedtuple
+import logging
 import jinja2
 import random
 
@@ -71,6 +72,7 @@ class SimpleCard(namedtuple('SimpleCard', ['time', 'template_name'])):
         })
     def template_vars(self): return {}
 
+
 # TODO hacky. will fix later
 def card_factory(js):
     js = json.loads(js)
@@ -83,6 +85,39 @@ class WorkoutTemplate(object):
     def render_template(self):
         template = jinja.get_template(self.card.template_name)
         return json.loads(template.render(self.card.template_vars()))
+
+TYPES = {
+    'Exercise': Exercise,
+    'SimpleCard': SimpleCard,
+    'WorkoutSet': WorkoutSet,
+}
+
+class CustomTypeEncoder(json.JSONEncoder):
+    """A custom JSONEncoder class that knows how to encode core custom
+    objects.
+
+    Custom objects are encoded as JSON object literals (ie, dicts) with
+    one key, '__TypeName__' where 'TypeName' is the actual name of the
+    type to which the object belongs.  That single key maps to another
+    object literal which is just the __dict__ of the object encoded."""
+
+    def default(self, obj):
+        for cls in TYPES.values():
+            if isinstance(obj, cls):
+                key = '__%s__' % obj.__class__.__name__
+                return { key: obj.__dict__ }
+        logging.warn("Don't know how to encode %s", str(obj))
+        return json.JSONEncoder.default(self, obj)
+
+
+class CustomTypeDecoder(json.JSONDecoder):
+    def default(self, dct):
+        if len(dct) == 1:
+            type_name, value = dct.items()[0]
+            type_name = type_name.strip('_')
+            if type_name in TYPES:
+                return TYPES[type_name].from_dict(value)
+        return dct
 
 # The sample workout we use for now
 workout = [ 

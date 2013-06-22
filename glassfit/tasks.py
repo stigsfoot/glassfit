@@ -6,11 +6,13 @@ memcache flushes"""
 
 import logging
 import webapp2
+import json
 from google.appengine.api import taskqueue
 from oauth2client.appengine import StorageByKeyName
 from google.appengine.api import memcache
 from model import Credentials
 from glassfit.workout import WorkoutTemplate, card_factory
+import glassfit.workout as gworkout
 import util
 
 class TaskHandler(object):
@@ -28,7 +30,8 @@ class TaskHandler(object):
         task = taskqueue.add(
             url='/cardq',
             params={
-                'payload': card.to_json(),
+                #'payload': card.to_json(),
+                'payload': json.dumps(card, cls=gworkout.CustomTypeEncoder),
                 'userid': userid,
             },
             countdown=countdown)
@@ -60,7 +63,8 @@ class CardWorker(webapp2.RequestHandler):
         else:
             self.init_service(userid)
             payload = self.request.get('payload')
-            workout = card_factory(payload).of_json(payload)
+            #workout = card_factory(payload).of_json(payload)
+            workout = json.loads(payload, cls=gworkout.CustomTypeDecoder) 
             card_body = WorkoutTemplate(workout).render_template()
             self.mirror_service.timeline().insert(body=card_body).execute()
             logging.info('card(%s) inserted: "%s"', taskid,
