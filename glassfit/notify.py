@@ -10,9 +10,6 @@ import glassfit.tasks as gtasks
 
 Exercise = namedtuple('Exercise', ['name', 'time'])
 
-def body(workout):
-    return {'text': 'Working out: doing {w}'.format(w=workout)}
-
 workouts = [
     Exercise(name='squat', time=15),
     Exercise(name='pushup', time=20),
