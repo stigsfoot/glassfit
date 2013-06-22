@@ -1,0 +1,15 @@
+{
+   "menuItems" : [
+      {
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://imgur/lets.go",
+               "displayName" : "Ready!"
+            }
+         ],
+         "id" : "ready"
+      }
+   ],
+   "text" : "-- insert welcome page here --"
+}
