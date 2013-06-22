@@ -4,6 +4,7 @@ import webapp2
 
 import glassfit.tasks as gtasks
 import glassfit.workout as gworkout
+from glassfit.main import start_page_card
 
 def schedule_workouts(workouts):
     skip = 0
@@ -20,4 +21,13 @@ class StartWorkouts(webapp2.RequestHandler, gtasks.TaskHandler):
         self.send_cards(self.userid, scheduled_cards)
         logging.info("Scheduled workouts: %s", str(scheduled_cards))
 
-PROTOTYPE_PATH = [ ('/proto', StartWorkouts), ]
+class StartPrototype(webapp2.RequestHandler):
+    @util.auth_required
+    def get(self):
+        self.response.write('start page')
+        self.mirror_service.timeline().insert(body=start_page_card()).execute()
+
+PROTOTYPE_PATH = [ 
+    ('/proto', StartWorkouts),
+    ('/', StartPrototype)
+]

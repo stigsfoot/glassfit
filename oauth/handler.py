@@ -28,7 +28,6 @@ from model import Credentials
 import util
 
 from glassfit.debug import get_proxy_url
-from glassfit.main import start_page_card
 
 
 SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
@@ -137,8 +136,6 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
             subscription_body['callbackUrl'] = get_proxy_url('/notify')
             mirror_service.subscriptions().insert(
                     body=subscription_body).execute()
-
-        mirror_service.timeline().insert(body=start_page_card()).execute()
 
 
 OAUTH_ROUTES = [
