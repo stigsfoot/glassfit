@@ -20,7 +20,7 @@ image_maps = {
     'Situps'  : imgur('GmkXqa1.gif'),
 }
 
-backgrounds = [imgur('bg1')]
+backgrounds = [imgur('aSWkGtm.png')]
 
 jinja = jinja2.Environment(
         loader=jinja2.FileSystemLoader(path.dirname(workouts_base)))
