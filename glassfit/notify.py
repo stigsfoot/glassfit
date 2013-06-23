@@ -20,12 +20,14 @@ class NotifyHandler(object):
 
         self.request_handler = request_handler
         self.mirror_service = request_handler.mirror_service
-
-        self.event = event['payload']
-        self.payload = payload
         self.userid = userid
+        self.payload = payload
 
-        self.dispatch(self.event)
+        if 'payload' in event:
+            self.event = event['payload']
+            self.dispatch(self.event)
+        else:
+            logging.info('Unrecognized event')
 
     def cancel_all_workouts(self):
         gtasks.cancel_cards(self.userid)
@@ -38,6 +40,7 @@ class NotifyHandler(object):
                 .format(evt=self.event, payload=self.payload))
 
     def ready_workout(self):
+        logging.info("Starting work out. Redirecting...")
         self.request_handler.redirect('/proto')
 
     def finish_workout(self):
