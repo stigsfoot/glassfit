@@ -41,7 +41,7 @@ class NotifyHandler(object):
 
     def ready_workout(self):
         logging.info("Starting work out. Redirecting...")
-        self.request_handler.redirect('/proto')
+        self.request_handler.ready_schedule_workouts()
 
     def finish_workout(self):
         logging.info('NOTIFY - User completed workout')

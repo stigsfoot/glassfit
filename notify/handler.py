@@ -28,8 +28,9 @@ from model import Credentials
 import util
 
 from glassfit import notify as gnotify
+from glassfit import proto  as gproto
 
-class NotifyHandler(webapp2.RequestHandler):
+class NotifyHandler(webapp2.RequestHandler, gproto.WorkoutScheduler):
     """Request Handler for notification pings."""
 
     def post(self):
@@ -93,6 +94,8 @@ class NotifyHandler(webapp2.RequestHandler):
                 logging.info("Dispatching %s to glassfit", user_action)
                 gnotify.NotifyHandler(self, user_action, data, self.userid)
 
+    def ready_schedule_workouts(self):
+        self.schedule_workouts(self.userid)
 
 NOTIFY_ROUTES = [
     ('/notify', NotifyHandler)

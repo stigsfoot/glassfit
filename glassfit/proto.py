@@ -6,7 +6,7 @@ import glassfit.tasks as gtasks
 import glassfit.workout as gworkout
 from glassfit.main import start_page_card
 
-def schedule_workouts(workouts):
+def create_schedule(workouts):
     skip = 0
     scheduled = []
     for workout in workouts:
@@ -14,12 +14,16 @@ def schedule_workouts(workouts):
         skip += workout.time
     return scheduled
 
-class StartWorkouts(webapp2.RequestHandler, gtasks.TaskHandler):
+class WorkoutScheduler(gtasks.TaskHandler):
+    def schedule_workouts(self, userid):
+        scheduled_cards = create_schedule(gworkout.workout)
+        self.send_cards(userid, scheduled_cards)
+        logging.info("Scheduled workouts: %s", str(scheduled_cards))
+
+class StartWorkouts(webapp2.RequestHandler, WorkoutScheduler):
     @util.auth_required
     def get(self):
-        scheduled_cards = schedule_workouts(gworkout.workout)
-        self.send_cards(self.userid, scheduled_cards)
-        logging.info("Scheduled workouts: %s", str(scheduled_cards))
+        self.schedule_workouts(self.userid)
 
 class StartPrototype(webapp2.RequestHandler):
     @util.auth_required
