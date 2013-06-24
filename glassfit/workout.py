@@ -114,12 +114,12 @@ class CustomTypeDecoder(json.JSONDecoder):
 
 # The sample workout we use for now
 workout = [ 
-    WorkoutSet(exercise=warmup, reps=15, time=20),
+    WorkoutSet(exercise=warmup, reps=15, time=30),
     RestCard(time=5, template_name='rest.json', message='Squats next'),
-    WorkoutSet(exercise=squats, reps=10, time=15),
+    WorkoutSet(exercise=squats, reps=10, time=30),
     RestCard(time=5, template_name='rest.json', message='Situps next'),
-    WorkoutSet(exercise=situps, reps=20, time=5),
+    WorkoutSet(exercise=situps, reps=20, time=30),
     RestCard(time=5, template_name='rest.json', message='Pushups next'),
-    WorkoutSet(exercise=pushups, reps=11, time=10),
+    WorkoutSet(exercise=pushups, reps=11, time=30),
     SimpleCard(template_name='finish.json', time=0)
 ]
