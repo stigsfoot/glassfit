@@ -10,5 +10,5 @@
    "notification": {
     "level": "DEFAULT"
    },
-   "text" : "You're doing great. Up next {{ message }}."
+   "text" : "You're doing great. Next up {{ message }}, lets go."
 }
