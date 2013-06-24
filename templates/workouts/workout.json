@@ -8,7 +8,11 @@
                "displayName" : "Cancel"
             }
          ],
+
          "id" : "cancel"
+      },
+      {
+         "action": "DELETE"
       }
    ],
    "notification": {
