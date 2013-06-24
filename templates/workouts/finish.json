@@ -4,8 +4,8 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://imgur/lets.go",
-               "displayName" : "Finish!"
+               "iconUrl" : "http://i.imgur.com/hsXeEt8.png",
+               "displayName" : "Done."
             }
          ],
          "id" : "finish"
