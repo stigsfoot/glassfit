@@ -1,3 +1,14 @@
 {
-   "text" : "resting for 1 2 3 {{ message }}"
+   "menuItems" : [
+      {
+         "action": "DELETE"
+      },
+      {
+         "action": "READ_ALOUD"
+      }
+   ],
+   "notification": {
+    "level": "DEFAULT"
+   },
+   "text" : "When I excercise, I wear all black. It's like a funeral for my fats. Next workout..."
 }
