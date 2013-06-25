@@ -27,6 +27,8 @@ from oauth2client.client import FlowExchangeError
 from model import Credentials
 import util
 
+import glassfit.contact
+
 from glassfit.debug import get_proxy_url
 
 
@@ -123,15 +125,9 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
             mirror_service.subscriptions().insert(
                     body=subscription_body).execute()
 
-            # Insert a sharing contact.
-            contact_body = {
-                'id': 'Python Quick Start',
-                'displayName': 'Python Quick Start',
-                'imageUrls': [util.get_full_url(self,
-                    '/static/images/python.png')]
-            }
-            mirror_service.contacts().insert(body=contact_body).execute()
+            glassfit.contact.create_contact(mirror_service)
         else:
+            logging.info("Supposed to create contact ...")
             logging.info('Creating a subscription using a proxy - LOCAL')
             subscription_body['callbackUrl'] = get_proxy_url('/notify')
             mirror_service.subscriptions().insert(
