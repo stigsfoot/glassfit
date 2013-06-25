@@ -5,7 +5,7 @@
          "values" : [
             {
                "iconUrl" : "http://i.imgur.com/hsXeEt8.png",
-               "displayName" : "Done."
+               "displayName" : "Done ({{ workout_time }}/{{ total_time }} seconds)."
             }
          ],
          "id" : "finish"

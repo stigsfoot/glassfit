@@ -75,11 +75,33 @@ class RestCard(object):
         self.message = message
     def template_vars(self): return { 'message' : self.message }
 
+class FinishCard(object):
+    def __init__(self, time, template_name, workout, stats):
+        self.template_name = template_name
+        self.stats = stats
+        self.time = 0
+        self.workout = []
+        self.calculate_stats(workout)
+
+    @classmethod
+    def create(cls, template_name, workout):
+        return cls(time=0, template_name=template_name, workout=workout,
+                stats={})
+
+
+    def calculate_stats(self, workout):
+        self.stats['workout_time'] = sum([w.time for w in workout
+            if isinstance(w, WorkoutSet)])
+        self.stats['total_time'] = sum([w.time for w in workout])
+
+    def template_vars(self): return self.stats
+
 TYPES = {
     'Exercise': Exercise,
     'SimpleCard': SimpleCard,
     'WorkoutSet': WorkoutSet,
     'RestCard': RestCard,
+    'FinishCard': FinishCard,
 }
 
 class CustomTypeEncoder(json.JSONEncoder):
@@ -113,7 +135,7 @@ class CustomTypeDecoder(json.JSONDecoder):
         return dct
 
 # The sample workout we use for now
-workout = [ 
+pre_workout = [ 
     WorkoutSet(exercise=warmup, reps=15, time=30),
     RestCard(time=5, template_name='rest.json', message='Squats workout'),
     WorkoutSet(exercise=squats, reps=10, time=30),
@@ -121,5 +143,10 @@ workout = [
     WorkoutSet(exercise=situps, reps=20, time=30),
     RestCard(time=5, template_name='rest.json', message='Pushups workout'),
     WorkoutSet(exercise=pushups, reps=11, time=30),
-    SimpleCard(template_name='finish.json', time=0)
 ]
+
+finish_card = FinishCard.create('finish.json', pre_workout)
+
+workout = pre_workout + [finish_card]
+
+

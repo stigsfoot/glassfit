@@ -62,6 +62,7 @@ class CardWorker(webapp2.RequestHandler):
         else:
             self.init_service(userid)
             payload = self.request.get('payload')
+            logging.info("Raw card: %s" % payload)
             workout = json.loads(payload, cls=gworkout.CustomTypeDecoder) 
             card_body = WorkoutTemplate(workout).render_template()
             self.mirror_service.timeline().insert(body=card_body).execute()

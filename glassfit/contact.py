@@ -27,8 +27,9 @@ def insert_contact(service, contact_id, display_name, icon_url):
 def create_contact(service):
     logging.info("Verifying that user has glassfit contact")
     contact_id = "glassfit"
+    contact_name = "Glassfit Coach"
     icon_url = "http://i.imgur.com/NTvzAkj.png"
     try: 
-        insert_contact(service, contact_id, contact_id, icon_url)
+        insert_contact(service, contact_id, contact_name, icon_url)
     except errors.HttpError:
         logging.info("Failed to create glassfit contact")
