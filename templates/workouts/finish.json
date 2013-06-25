@@ -11,7 +11,7 @@
          "id" : "finish"
       }
    ],
-   "html": "<article class=\"photo\">\n  <img src=\"http://i.imgur.com/imL66fr.png\" width=\"100%\" height=\"100%\">\n  <div class=\"photo-overlay \"></div>\n  <section>\n    <p class=\"text-auto-size align-center\">Congrats on finishing! ({{ workout_time }}/{{ total_time }} seconds)</p>\n  </section>\n<footer><img src=\"http://i.imgur.com/XG2zhcS.png\">\n\n</footer>\n</article>",
+   "html": "<article class=\"photo\">\n  <img src=\"http://i.imgur.com/imL66fr.png\" width=\"100%\" height=\"100%\">\n  <div class=\"photo-overlay \"></div>\n  <section>\n    <p class=\"text-auto-size align-center\">Congrats on finishing! (Workout Time: {{ workout_time }}/Total TIme: {{ total_time }} seconds)</p>\n  </section>\n<footer><img src=\"http://i.imgur.com/XG2zhcS.png\">\n\n</footer>\n</article>",
    "notification": {
     "level": "DEFAULT"
    }
