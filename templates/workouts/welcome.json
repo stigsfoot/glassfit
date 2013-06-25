@@ -23,7 +23,7 @@
    "notification": {
     "level": "DEFAULT"
    },
-
+   "text": "Be sure to stretch before your workout. If you are unsure about doing this stuff, stop and call a doctor. Remember, this is just a prototype.", 
    "html": "<article class=\"photo\">  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <section>    <p class=\"text-auto-size\">GlassFit workout of the day. Tap to start.</p>  </section></article>",
    "htmlPages": [
     "<article class=\"photo\">    <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <div class=\"photo-overlay\"></div>  <section>    <p class=\"text-auto-size\">Be sure to stretch for 10 minutes.</p>  </section></article>",
