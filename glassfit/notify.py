@@ -32,9 +32,12 @@ class NotifyHandler(object):
         else:
             logging.info('Unrecognized event')
 
-    def beginner(self): pass
-    def intermediate(self): pass
-    def advanced(self): pass
+    def beginner(self):
+        self.request_handler.ready_schedule_workouts('beginner')
+    def intermediate(self):
+        self.request_handler.ready_schedule_workouts('intermediate')
+    def advanced(self):
+        self.request_handler.ready_schedule_workouts('advanced')
 
     def cancel_all_workouts(self):
         gtasks.cancel_cards(self.userid)
