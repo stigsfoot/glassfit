@@ -5,16 +5,6 @@
          "values" : [
             {
                "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
-               "displayName" : "Ready!"
-            }
-         ],
-         "id" : "ready"
-      },
-      {
-         "action" : "CUSTOM",
-         "values" : [
-            {
-               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
                "displayName" : "Beginner"
             }
          ],
