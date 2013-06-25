@@ -94,8 +94,8 @@ class NotifyHandler(webapp2.RequestHandler, gproto.WorkoutScheduler):
                 logging.info("Dispatching %s to glassfit", user_action)
                 gnotify.NotifyHandler(self, user_action, data, self.userid)
 
-    def ready_schedule_workouts(self):
-        self.schedule_workouts(self.userid)
+    def ready_schedule_workouts(self, profile='beginner'):
+        self.schedule_workouts(self.userid, profile)
 
 NOTIFY_ROUTES = [
     ('/notify', NotifyHandler)

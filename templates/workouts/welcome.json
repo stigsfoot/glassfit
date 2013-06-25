@@ -11,6 +11,36 @@
          "id" : "ready"
       },
       {
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "displayName" : "Beginner"
+            }
+         ],
+         "id" : "profile_beginner"
+      },
+      {
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "displayName" : "Intermediate"
+            }
+         ],
+         "id" : "profile_intermediate"
+      },
+      {
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "displayName" : "Advanced"
+            }
+         ],
+         "id" : "profile_advanced"
+      },
+      {
          "action":"TOGGLE_PINNED"
       },
       {

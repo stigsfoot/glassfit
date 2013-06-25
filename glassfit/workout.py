@@ -149,4 +149,46 @@ finish_card = FinishCard.create('finish.json', pre_workout)
 
 workout = pre_workout + [finish_card]
 
+def select_workout(name):
+    pre_workouts = {
+        'beginner' : [
+            WorkoutSet(exercise=warmup, reps=15, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='squats workout'),
+            WorkoutSet(exercise=squats, reps=10, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='sit ups workout'),
+            WorkoutSet(exercise=situps, reps=20, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='push ups workout'),
+            WorkoutSet(exercise=pushups, reps=11, time=30),
+        ],
+        'intermediate' : [
+            WorkoutSet(exercise=warmup, reps=15, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='squats workout'),
+            WorkoutSet(exercise=squats, reps=10, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='sit ups workout'),
+            WorkoutSet(exercise=situps, reps=20, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='push ups workout'),
+            WorkoutSet(exercise=pushups, reps=11, time=30),
+        ],
+        'advanced' : [
+            WorkoutSet(exercise=warmup, reps=15, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='squats workout'),
+            WorkoutSet(exercise=squats, reps=10, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='sit ups workout'),
+            WorkoutSet(exercise=situps, reps=20, time=30),
+            RestCard(time=10, template_name='rest.json',
+                message='push ups workout'),
+            WorkoutSet(exercise=pushups, reps=11, time=30),
+        ],
+    }
+    pre_workout = pre_workouts[name]
+    return pre_workout + [FinishCard.create('finish.json', pre_workout)]
+
 

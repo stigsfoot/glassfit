@@ -13,9 +13,12 @@ class NotifyHandler(object):
         logging.info("Dispatching event={event}".format(event=event))
 
         self.__table = {
-            u'ready': self.ready_workout,
-            u'finish': self.finish_workout,
-            u'cancel': self.cancel_all_workouts
+            u'ready'                : self.ready_workout,
+            u'finish'               : self.finish_workout,
+            u'cancel'               : self.cancel_all_workouts,
+            u'profile_beginner'     : self.beginner,
+            u'profile_intermediate' : self.intermediate,
+            u'profile_advanced'     : self.intermediate
         }
 
         self.request_handler = request_handler
@@ -28,6 +31,10 @@ class NotifyHandler(object):
             self.dispatch(self.event)
         else:
             logging.info('Unrecognized event')
+
+    def beginner(self): pass
+    def intermediate(self): pass
+    def advanced(self): pass
 
     def cancel_all_workouts(self):
         gtasks.cancel_cards(self.userid)

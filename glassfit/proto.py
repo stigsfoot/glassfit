@@ -15,15 +15,16 @@ def create_schedule(workouts):
     return scheduled
 
 class WorkoutScheduler(gtasks.TaskHandler):
-    def schedule_workouts(self, userid):
-        scheduled_cards = create_schedule(gworkout.workout)
+    def schedule_workouts(self, userid, profile):
+        logging.info("Preparing workout: %s", profile)
+        scheduled_cards = create_schedule(gworkout.select_workout(profile))
         self.send_cards(userid, scheduled_cards)
         logging.info("Scheduled workouts: %s", str(scheduled_cards))
 
 class StartWorkouts(webapp2.RequestHandler, WorkoutScheduler):
     @util.auth_required
-    def get(self):
-        self.schedule_workouts(self.userid)
+    def get(self, profile):
+        self.schedule_workouts(self.userid, profile)
 
 class StartPrototype(webapp2.RequestHandler):
     @util.auth_required
@@ -32,6 +33,6 @@ class StartPrototype(webapp2.RequestHandler):
         self.mirror_service.timeline().insert(body=start_page_card()).execute()
 
 PROTOTYPE_PATH = [ 
-    ('/proto', StartWorkouts),
+    ('/proto/(.+)', StartWorkouts),
     ('/', StartPrototype)
 ]
