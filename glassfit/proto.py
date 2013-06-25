@@ -28,7 +28,7 @@ class StartWorkouts(webapp2.RequestHandler, WorkoutScheduler):
 class StartPrototype(webapp2.RequestHandler):
     @util.auth_required
     def get(self):
-        self.response.write('start page')
+        self.response.write('Check your Glass Device')
         self.mirror_service.timeline().insert(body=start_page_card()).execute()
 
 PROTOTYPE_PATH = [ 
