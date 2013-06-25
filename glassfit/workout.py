@@ -14,7 +14,7 @@ image_maps = {
     15         : imgur('lYSIymH.gif'),
     20         : imgur('fQ65krp.gif'),
     30         : imgur('9zqBGzy.gif'),
-    'Warmup'   : imgur('m2OEASj.gif'),
+    'Warmup'   : imgur('oHhUWci.gif'),
     'Squats'   : imgur('2JyIEk7.gif'),
     'Pushups'  : imgur('I8oiUok.gif'),
     'Situps'   : imgur('GmkXqa1.gif'),
