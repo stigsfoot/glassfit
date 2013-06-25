@@ -81,12 +81,12 @@ class FinishCard(object):
         self.stats = stats
         self.time = 0
         self.workout = []
-        self.calculate_stats(workout)
 
     @classmethod
     def create(cls, template_name, workout):
-        return cls(time=0, template_name=template_name, workout=workout,
+        instance = cls(time=0, template_name=template_name, workout=workout,
                 stats={})
+        instance.calculate_stats()
 
 
     def calculate_stats(self, workout):
