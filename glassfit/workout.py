@@ -81,11 +81,19 @@ class WorkoutTemplate(object):
         return json.loads(template.render(self.card.template_vars()))
 
 class RestCard(object):
-    def __init__(self, time, template_name, message):
+    def __init__(self, reps, time, template_name, message, exercise):
         self.time = time
         self.template_name = template_name
         self.message = message
-    def template_vars(self): return { 'message' : self.message }
+        self.exercise = exercise
+        self.reps = reps
+
+    def template_vars(self): 
+        return { 
+                'message'     : self.message,
+                'workout_name': self.exercise.name,
+                'num_reps'    : self.reps
+                }
 
 class FinishCard(object):
     def __init__(self, time, template_name, workout, stats):
@@ -150,23 +158,23 @@ class CustomTypeDecoder(json.JSONDecoder):
 # The sample workout we use for now
 pre_workout = [ 
     WorkoutSet(exercise=warmup, reps=15, time=30),
-    RestCard(time=17, template_name='rest.json', message='squats workout'),
+    RestCard(time=17, reps='15', template_name='rest.json', message='squats workout', exercise='warm up'),
     WorkoutSet(exercise=squats, reps=10, time=30),
-    RestCard(time=17, template_name='rest.json', message='sit ups workout'),
+    RestCard(time=17, reps='10', template_name='rest.json', message='sit ups workout', exercise='squat workout'),
     WorkoutSet(exercise=situps, reps=20, time=30),
-    RestCard(time=17, template_name='rest.json', message='push ups workout'),
+    RestCard(time=17, reps='20', template_name='rest.json', message='push ups workout', exercise='situp workout'),
     WorkoutSet(exercise=pushups, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='ab crunch workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='ab crunch workout', exercise='push up workout'),
     WorkoutSet(exercise=ab_crunch, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='plank workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='plank workout', exercise='ab crunch'),
     WorkoutSet(exercise=plank, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='side plank workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='side plank workout', exercise='plank'),
     WorkoutSet(exercise=sideplank, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='bicep curls workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='bicep curls workout', exercise='side plank'),
     WorkoutSet(exercise=curls, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='tricep extentions workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='tricep extentions workout', exercise='curl workout'),
     WorkoutSet(exercise=extention, reps=11, time=30),
-    RestCard(time=17, template_name='rest.json', message='wall sit workout'),
+    RestCard(time=17, reps='11', template_name='rest.json', message='wall sit workout', exercise='tricep extention workout'),
     WorkoutSet(exercise=wallsit, reps=11, time=30),
 ]
 
@@ -178,82 +186,82 @@ def select_workout(name):
     pre_workouts = {
         'beginner' : [
             WorkoutSet(exercise=warmup, reps=10, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='squats workout'),
+            RestCard(time=17, reps='10', template_name='rest.json',
+                message='squats workout', exercise='warmup'),
 
             WorkoutSet(exercise=squats, reps=10, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='sit ups workout'),
+            RestCard(time=17, reps='10', template_name='rest.json',
+                message='sit ups workout', exercise='squats workout'),
 
             WorkoutSet(exercise=situps, reps=10, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='push ups workout'),
+            RestCard(time=17, reps='10', template_name='rest.json',
+                message='push ups workout', exercise='sit up workout'),
 
             WorkoutSet(exercise=pushups, reps=10, time=30),
         ],
         'intermediate' : [
             WorkoutSet(exercise=warmup, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='squats workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='squats workout', exercise='warm up'),
             
             WorkoutSet(exercise=situps, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='push ups workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='push ups workout', exercise='sit up workout'),
 
             WorkoutSet(exercise=pushups, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='plank workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='plank workout', exercise='push up workout'),
 
             WorkoutSet(exercise=plank, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='side plank workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='side plank workout', exercise='planks'),
 
             WorkoutSet(exercise=squats, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='sit ups workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='sit ups workout', exercise='squat workout'),
 
             WorkoutSet(exercise=sideplank, reps=15, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='wall sit workout'),
+            RestCard(time=17, reps='15', template_name='rest.json',
+                message='wall sit workout', exercise='side plank workout'),
 
             WorkoutSet(exercise=wallsit, reps=15, time=30),
         ],
         'advanced' : [
             WorkoutSet(exercise=warmup, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='squats workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='squats workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=sideplank, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='bicep curls workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='bicep curls workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=curls, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='tricep extentions workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='tricep extentions workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=squats, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='sit ups workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='sit ups workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=situps, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='push ups workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='push ups workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=pushups, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='ab crunch workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='ab crunch workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=ab_crunch, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='plank workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='plank workout', exercise='tricep extention workout'),
 
             WorkoutSet(exercise=plank, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='side plank workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='side plank workout', exercise='tricep extention workout'),
             
             WorkoutSet(exercise=extention, reps=20, time=30),
-            RestCard(time=17, template_name='rest.json',
-                message='wall sit workout'),
+            RestCard(time=17, reps='20', template_name='rest.json',
+                message='wall sit workout', exercise='tricep extention workout'),
             WorkoutSet(exercise=wallsit, reps=20, time=30),
         ],
     }
