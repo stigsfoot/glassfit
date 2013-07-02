@@ -18,7 +18,8 @@ class NotifyHandler(object):
             u'cancel'               : self.cancel_all_workouts,
             u'profile_beginner'     : self.beginner,
             u'profile_intermediate' : self.intermediate,
-            u'profile_advanced'     : self.intermediate
+            u'profile_advanced'     : self.advanced,
+            u'met_goal'             : self.goal
         }
 
         self.request_handler = request_handler
@@ -38,6 +39,9 @@ class NotifyHandler(object):
         self.request_handler.ready_schedule_workouts('intermediate')
     def advanced(self):
         self.request_handler.ready_schedule_workouts('advanced')
+
+    def goal(self):
+        logging.info("User met their workout goal")
 
     def cancel_all_workouts(self):
         gtasks.cancel_cards(self.userid)
