@@ -1,14 +1,22 @@
 {
    "menuItems" : [
       {
-         "action": "DELETE"
+         "action": "READ_ALOUD"
       },
       {
-         "action": "READ_ALOUD"
+         "action" : "CUSTOM",
+         "values" : [
+            {
+               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "displayName" : "Cancel"
+            }
+         ],
+
+         "id" : "cancel"
       }
    ],
    "notification": {
     "level": "DEFAULT"
    },
-   "text" : "You're doing great. Next up {{ message }}, lets go."
+   "text" : "You're doing great. You really destroyed {{ exercise }}. Next up {{ message }}, lets go."
 }
