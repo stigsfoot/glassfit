@@ -4,7 +4,7 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "iconUrl" : "http://i.imgur.com/6ju84xM.png",
                "displayName" : "Beginner"
             }
          ],
@@ -14,7 +14,7 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "iconUrl" : "http://i.imgur.com/pjUpAVd.png",
                "displayName" : "Intermediate"
             }
          ],
@@ -24,7 +24,7 @@
          "action" : "CUSTOM",
          "values" : [
             {
-               "iconUrl" : "http://i.imgur.com/NTvzAkj.png",
+               "iconUrl" : "http://i.imgur.com/g5V15om.png",
                "displayName" : "Advanced"
             }
          ],
@@ -34,21 +34,20 @@
          "action":"TOGGLE_PINNED"
       },
       {
-         "action": "DELETE"
+         "action": "READ_ALOUD"
       },
       {
-         "action": "READ_ALOUD"
+         "action": "DELETE"
       }
    ],
    "notification": {
     "level": "DEFAULT"
    },
-   "text": "Be sure to stretch before your workout. If you are unsure about doing this stuff, stop and call a doctor. Remember, this is just a prototype.", 
+   "text": "Be sure to stretch before your workout. If you are unsure about doing this stuff, stop and consult a doctor. Remember, this is just a prototype.", 
    "html": "<article class=\"photo\">  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <section>    <p class=\"text-auto-size\">GlassFit workout of the day. Tap to start.</p>  </section></article>",
    "htmlPages": [
-    "<article class=\"photo\">    <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <div class=\"photo-overlay\"></div>  <section>    <p class=\"text-auto-size\">Be sure to stretch for 10 minutes.</p>  </section></article>",
-    "<article>\n  <section>\n    <table class=\"text-small\">\n      <tbody>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/VuiNqd7.png\" class=\"icon-small\">\n            Warmup\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n        </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Squats\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Pushups\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Situps\n          </td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </section>\n  <footer>\n    <img src=\"http://i.imgur.com/8mNeU1z.png\" class=\"left\">\n    <p>Upcoming workout list</p>\n  </footer>\n</article>\n",
-    "<article class=\"photo\">  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <div class=\"photo-overlay\"></div>  <section>    <p class=\"text-auto-size\">Your feedback is valued. Lets begin</p>  </section></article>"
+    "<article>\n  <section>\n  <p class=\"text-large blue\">Workout types</p>  <table class=\"text-small\">\n      <tbody>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/VuiNqd7.png\" class=\"icon-small\">&nbsp;Beginner</td>\n          <td>\n            <div class=\"text-minor align-right muted\">120 seconds&nbsp;</div>\n        </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Intermediate</td>\n          <td>\n            <div class=\"text-minor align-right muted\">3.5 minutes</div>\n          </td>\n        </tr>\n        <tr>\n          <td>\n            <img src=\"http://i.imgur.com/AMzK1GL.png\" class=\"icon-small\">\n            Advanced</td>\n          <td>\n            <div class=\"text-minor align-right muted\">30 Seconds</div>\n          </td>\n        </tr>\n              </tbody>\n    </table>\n  </section>\n  <footer>\n    <img src=\"http://i.imgur.com/8mNeU1z.png\" class=\"left\">\n    <p>Intensity/Workout time</p>\n  </footer>\n</article>",
+    "<article class=\"photo\">  <img src=\"http://i.imgur.com/S4aiJ7h.png\" width=\"100%\" height=\"100%\">  <div class=\"photo-overlay\"></div>  <section>    <p class=\"text-auto-size\">Pro-tip: Don't worry about the screen timeout, use the notifications for a hands free experience.</p>  </section></article>"
   ]
 }
 
