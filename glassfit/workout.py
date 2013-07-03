@@ -91,7 +91,7 @@ class RestCard(object):
     def template_vars(self): 
         return { 
                 'message'     : self.message,
-                'workout_name': self.exercise.name,
+                'workout_name': self.exercise,
                 'num_reps'    : self.reps
                 }
 
