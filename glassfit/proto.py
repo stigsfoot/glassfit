@@ -33,6 +33,7 @@ class StartPrototype(webapp2.RequestHandler):
         self.mirror_service.timeline().insert(body=start_page_card()).execute()
 
 PROTOTYPE_PATH = [ 
+    # The argument passed is the profile to do. example: 'beginner'
     ('/proto/(.+)', StartWorkouts),
     ('/', StartPrototype)
 ]
