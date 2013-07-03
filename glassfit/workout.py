@@ -92,7 +92,9 @@ class RestCard(object):
         return { 
                 'message'     : self.message,
                 'workout_name': self.exercise,
-                'num_reps'    : self.reps
+                'num_reps'    : self.reps,
+                'exercise'    : self.exercise,
+                'reps'        : self.reps
                 }
 
 class FinishCard(object):
