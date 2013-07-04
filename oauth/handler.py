@@ -32,8 +32,10 @@ import glassfit.contact
 from glassfit.debug import get_proxy_url
 
 
-SCOPES = ('https://www.googleapis.com/auth/glass.timeline '
-          'https://www.googleapis.com/auth/glass.location '
+SCOPES = ('https://www.googleapis.com/auth/glass.timeline',
+          'https://www.googleapis.com/auth/glass.location',
+          #'https://www.googleapis.com/auth/plus.me',
+          'https://www.googleapis.com/auth/plus.login',
           'https://www.googleapis.com/auth/userinfo.profile')
 
 
