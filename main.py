@@ -32,10 +32,12 @@ from signout.handler import SIGNOUT_ROUTES
 from glassfit.debug import DEBUG_PATHS
 from glassfit.proto import PROTOTYPE_PATH
 from glassfit.tasks import TASK_ROUTES
+from glassfit.gplus import GPLUS_PATH
 
 ROUTES = (
     ATTACHMENT_PROXY_ROUTES + MAIN_ROUTES + NOTIFY_ROUTES + OAUTH_ROUTES +
-    SIGNOUT_ROUTES + DEBUG_PATHS + PROTOTYPE_PATH + TASK_ROUTES
+    SIGNOUT_ROUTES + DEBUG_PATHS + PROTOTYPE_PATH + TASK_ROUTES +
+    GPLUS_PATH
 )
 
 app = webapp2.WSGIApplication(ROUTES)
