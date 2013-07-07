@@ -29,6 +29,7 @@ import util
 
 from glassfit import notify as gnotify
 from glassfit import proto  as gproto
+from glassfit import gplus
 
 class NotifyHandler(webapp2.RequestHandler, gproto.WorkoutScheduler):
     """Request Handler for notification pings."""
@@ -88,6 +89,7 @@ class NotifyHandler(webapp2.RequestHandler, gproto.WorkoutScheduler):
                 }
                 self.mirror_service.timeline().insert(
                     body=body, media_body=media).execute()
+                gplus.share_workout_gplus(self.mirror_service, item)
                 # Only handle the first successful action.
                 break
             else:
