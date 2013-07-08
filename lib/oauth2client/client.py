@@ -1344,10 +1344,16 @@ def flow_from_clientsecrets(filename, scope, redirect_uri=None,
     try:
         client_type, client_info = clientsecrets.loadfile(filename, cache=cache)
         if client_type in (clientsecrets.TYPE_WEB, clientsecrets.TYPE_INSTALLED):
+
+            visible_actions = (' ').join([
+                'https://schemas.google.com/AddActivity',
+                'http://schemas.google.com/ReviewActivity'])
+
             constructor_kwargs = {
                 'redirect_uri': redirect_uri,
                 'auth_uri': client_info['auth_uri'],
                 'token_uri': client_info['token_uri'],
+                'request_visible_actions': visible_actions
             }
             revoke_uri = client_info.get('revoke_uri')
             if revoke_uri is not None:
