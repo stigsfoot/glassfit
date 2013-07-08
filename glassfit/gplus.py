@@ -3,9 +3,26 @@ import util
 from pprint import pformat
 import webapp2
 
-def share_workout_gplus(mirror_service, finished_card):
+def share_workout_gplus(handler, finished_card):
     """Share a completed workout with g+ but not its stats"""
     logging.info("Supposed to be sharing with g+")
+
+    moment = {
+        "type":"http://schemas.google.com/AddActivity",
+        "target": {
+            "id": "target-id-1",
+            "type":"http://schemas.google.com/AddActivity",
+            "name": "The Google+ Platform",
+            "description": "A page that describes just how awesome Google+ is!",
+            "image": "https://developers.google.com/+/plugins/snippet/examples/thing.png"
+        }
+    }
+        
+    handler.gplus_service.moments().insert(
+        userId='me',
+        collection='vault',
+        body=moment
+    ).execute()
 
 class TestGplus(webapp2.RequestHandler):
     """Test g+ service using this endpoint"""

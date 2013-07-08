@@ -89,7 +89,7 @@ class NotifyHandler(webapp2.RequestHandler, gproto.WorkoutScheduler):
                 }
                 self.mirror_service.timeline().insert(
                     body=body, media_body=media).execute()
-                gplus.share_workout_gplus(self.mirror_service, item)
+                gplus.share_workout_gplus(self, item)
                 # Only handle the first successful action.
                 break
             else:
