@@ -1,5 +1,6 @@
 import logging
 import util
+import json
 from pprint import pformat
 import webapp2
 
@@ -37,4 +38,23 @@ class TestGplus(webapp2.RequestHandler):
         user = self.gplus_service.people().get(userId='me').execute()
         self.response.write('<pre>%s</pre>' % pformat(user))
 
-GPLUS_PATH = [ ('/d/gplus', TestGplus) ]
+class TestInsertMoment(webapp2.RequestHandler):
+    """test inserting a moment"""
+    @util.auth_required
+    def get(self):
+        share_workout_gplus(self, None)
+
+class ListMoments(webapp2.RequestHandler):
+    """List all moments that this app created"""
+    @util.auth_required
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        moments = self.gplus_service.moments().list(userId='me',
+                collection='vault').execute()
+        self.response.write(json.dumps(moments))
+
+GPLUS_PATH = [
+    ('/d/gplus', TestGplus),
+    ('/d/insert_moment', TestInsertMoment),
+    ('/d/moments', ListMoments)
+]
