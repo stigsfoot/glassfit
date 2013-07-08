@@ -4,8 +4,9 @@ import json
 from pprint import pformat
 import webapp2
 
-def share_workout_gplus(handler, finished_card):
-    """Share a completed workout with g+ but not its stats"""
+def share_workout_gplus(handler, data):
+    """Create a g+ moment and then update the finish card to show
+    the user that we've shared it on g+"""
     logging.info("Supposed to be sharing with g+")
 
     moment = {
@@ -24,6 +25,12 @@ def share_workout_gplus(handler, finished_card):
         collection='vault',
         body=moment
     ).execute()
+
+    item = handler.mirror_service.timeline().get(id=data['itemId']).execute()
+    # might not show anything since its an html card
+    item['text'] = 'finished workout'
+    handler.mirror_service.timeline().update(
+            id=data['itemId'], body=item).execute()
 
 class TestGplus(webapp2.RequestHandler):
     """Test g+ service using this endpoint"""
