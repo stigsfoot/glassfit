@@ -94,4 +94,4 @@ def auth_required(handler_method):
         else:
             handler_method(self, *args)
 
-    return check_auth
+    return check_auth 
