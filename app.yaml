@@ -1,3 +1,4 @@
+#application id corresponds with your local & server app ID, change accordingly before testing.
 application: xglassfit
 version: 1
 runtime: python27
