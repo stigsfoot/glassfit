@@ -17,7 +17,7 @@ handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
-
+#basic
 libraries:
 - name: jinja2
   version: latest
